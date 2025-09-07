@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row">
+        @if (pecaDetalhe) {
+                    <div class = "col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <img src="{{ pecaDetalhe.linkFoto}}" width="100%">
+        </div>
+        <div class = "col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            <h4>{{pecaDetalhe.nome}}</h4>
+            <p>{{pecaDetalhe.detalhe}}</p>
+            <h5>Preço R${{pecaDetalhe.preco | number: '1.1-2'}}</h5>
+
+
+            <input type="number" [(ngModel)] ="quantidade" class="form-control" placeholder= 1 value = "1" max = "100" min = "1" >
+            <br>
+            <button type = "button" (click) = "adicionarCarrinho()" class="btn btn-primary">Adicionar ao carrinho</button>
+        </div>
+        }
+
+    </div>
+</div>

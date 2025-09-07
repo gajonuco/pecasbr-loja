@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h3>Seu carrinho</h3>
+    </div>
+  </div>
+
+  @if (vazio) {
+  <div class="row">
+    <div class="col-12">
+      <h3>Seu carrinho está vazio!</h3>
+    </div>
+  </div>
+  }@else {
+  <div id="itens" >
+    <div class="row">
+      <div class="col-12">
+        <h3>Valor Total R$ {{ pedido.valorTotal | number: "1.2-2"}}</h3>
+        <br>
+      </div>
+    </div>
+  
+
+    @for (ITEM of pedido.itensPedido; track ITEM.peca.id){
+            <div class="row itemPedido" >
+      <div class = "col-6 col-sm-6 col-md-3 col-lg-2 col-xl-2">
+        <img src= "{{ ITEM.peca.linkFoto }}" width="80%">
+      </div>
+      <div class = "col-6 col-sm-6 col-md-4 col-lg-5 col-xl-5 text-center">
+        <label for="nome">Produto</label>
+            <h4 id ="nome">{{ ITEM.peca.nome }}</h4>
+            <i (click) ="removerItem(ITEM.peca.id)" class="fa-solid fa-trash"></i>
+      </div>
+      <div class = "col-6 col-sm-4 col-md-2 col-lg-2 col-xl-2 text-center">
+            <label for = "prUni">Preco Unitário</label>
+            <h5 id="prUni">R$ {{ ITEM.precoUnitario  | number: '1.1-2' }}</h5>
+      </div>
+      <div class = "col-6 col-sm-4 col-md-1 col-lg-1 col-xl-1 text-center">
+        <label for = "qtd">Quant.</label>
+             <h5 id="qtd">{{ ITEM.qtdtItem }}</h5>
+      </div>
+      <div class = "col-6 col-sm-4 col-md-2 col-lg-2 col-xl-2 text-center">
+        <label for = "prTotal">Preço Total</label>
+             <h5 id ="prTotal">R$ {{ ITEM.precoTotal | number: '1.1-2' }}</h5>
+      </div>
+    </div>
+    }
+    @if (pedido != null && pedido.itensPedido.length > 0) {
+      <div class = row>
+      <div class = "col-6 text-center">
+        <br>
+        <button class="btn btn-primary" (click)= "continuar()">Continuar comprando</button>
+      </div>
+      <div class = "col-6 text-center">
+        <br>
+        <button class="btn btn-primary" (click)= "efetivar()">Finalizar compra</button>
+      </div>
+    </div>
+    }
+
+  </div>
+  }
+</div>

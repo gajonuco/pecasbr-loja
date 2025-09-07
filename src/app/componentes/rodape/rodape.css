@@ -1,0 +1,26 @@
+#rodape{
+    padding-top: 1em;
+    background-color: cadetblue;
+    color:bisque
+}
+#coluna1{
+    padding-top: 2.7em;
+}
+#coluna2{
+    padding-bottom: 10px;
+}
+#coluna3{
+    padding-bottom: 10px;
+}
+
+h4{
+    text-shadow: 1px 1px 5px black;
+}
+
+h6{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid white;
+    text-shadow: 1px 1px 5px black;
+}
