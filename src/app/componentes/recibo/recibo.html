@@ -2,18 +2,52 @@
 <div class= "container">
     <div class = "row">
         <div class ="col-12 text-center">
-            <p>Recibo do seu pedido</p>
+             <h1>Recibo do seu pedido</h1>
         </div>
     </div>
-    <div class = "row">
-        <div class ="col-12 text-center">
-            <p>Pedido Nº {{idPedido}}</p>   
+
+    <div class="row mt-10">
+        <div class="col-12 text-center">
+            <p>Obrigado {{detalhePedido.cliente.nome}}! Já estamos processando seu pedido!</p>
+            <p>Seu Whatsapp é {{ detalhePedido.cliente.telefone }} </p>
         </div>
     </div>
-    <div class = "row">
-        <div class ="col-12 text-center">
-            <p>Recibo do seu pedido</p>
+
+    <div class="row mt-10">
+        <div class="col-12 text-center">
+            <h3>Pedido número {{ idPedido }}</h3>
+            <h4>Total a pagar R$ {{detalhePedido.valorTotal | number : '1.2-2'}}</h4>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <p><b>Sobre Pagamentos:</b></p>
+            <p>Em breve entraremos em contato para combinarmos a forma de pagamento e sanar eventuais dúvidas</p>
+            <p>Sigo à disposição pelas redes sociais e Whastapp (11) 96357-3218</p>
+            <p>Veja o resumo dos itens que você comprou</p>            
+        </div>
+    </div>
+
+        <table class="table">
+        <thead>
+            <tr>
+                <th>FOTO</th>
+                <th>Produto</th>
+                <th>Qtd</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(ITEM of detalhePedido.itensPedido; track detalhePedido){
+                <tr>
+                <td><img src="{{ITEM.peca.linkFoto}}" width="50px"></td>
+                <td>{{ ITEM.peca.nome}}</td>
+                <td>{{ ITEM.qtdtItem}}</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 }

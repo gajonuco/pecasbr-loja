@@ -146,6 +146,7 @@ public buscarCPF(): void {
         next: (cli: Cliente) => {
           this.cliente = Object.assign(new Cliente(), cli);
           this.achou = true;
+          this.exibirPerguntaEndereco = true
           this.msgEndereco = this.cliente.logradouro.substring(0,10) + "************** ";
         },
         error: (err) => {

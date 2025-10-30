@@ -1,8 +1,32 @@
-#btnBuscar, #btnBuscarCEP{
-    margin-top: 2em;
-    width: 100%;
+/* Garante alinhamento dos botões com os inputs ao lado */
+.col-4.col-sm-4.col-md-3.col-lg-2.col-xl-2 {
+  display: flex;
+  align-items: center; /* use "center" se quiser o botão mais centralizado verticalmente */
 }
 
-#btnModal{
-    visibility: hidden;
+/* Ajustes dos botões em si */
+#btnBuscar, #btnBuscarCEP {
+  padding: 8px 18px;           /* mantém proporção agradável */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin-top: 17.5px
+}
+
+/* Responsividade: botão ocupa linha inteira no mobile */
+@media (max-width: 576px) {
+  .col-4.col-sm-4.col-md-3.col-lg-2.col-xl-2 {
+    display: block;
+  }
+
+  #btnBuscar, #btnBuscarCEP {
+    width: 100%;
+    margin-top: 6px;
+  }
+}
+
+/* Mantém o botão invisível (provavelmente usado em modais) */
+#btnModal {
+  visibility: hidden;
 }
