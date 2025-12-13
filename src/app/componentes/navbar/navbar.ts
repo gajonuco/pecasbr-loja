@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriaPecaService } from '../../servicos/categoria-peca';
 import { CategoriaPeca } from '../../model/CategoriaPeca';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { Pedido } from '../../model/Pedido';
 import { CarrinhoService } from '../../servicos/carrinho-service';
@@ -12,7 +12,7 @@ import { BuscarProdutoByKey } from '../../servicos/buscar-produto-by-key';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
