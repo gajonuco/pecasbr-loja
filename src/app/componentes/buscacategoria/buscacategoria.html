@@ -1,18 +1,19 @@
-<div class="container" id ="destaques">
-        <div class ="row mb-3">
-            @for (ITEM of lista; track lista) {
-                <div  class ="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                    <div class="card">
-                    <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.linkFoto }}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">{{ ITEM.nome }}</h5>
-                        <h6 class="card-subtitle text-center "> {{ ITEM.preco | currency:'BRL'}}</h6>
-                        <p class="card-text">{{ ITEM.detalhe }}</p>
-                        <p class="card-text">Categoria: {{ ITEM.categoriaPeca.nome }}</p>
-                        <a [routerLink] ="['/detalhe/', ITEM.id]" class="btn btn-primary">Eu quero!!</a>
-                    </div>
-                    </div>
+<div class="container" id="destaques">
+    <div class="row mb-3">
+        @for (ITEM of lista; track lista) {
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+            <div class="card">
+                <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.linkFoto }}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ ITEM.nome }}</h5>
+                    <h6 class="card-subtitle text-center "> {{ ITEM.preco | currency:'BRL'}}</h6>
+
+                    <div [innerHTML]="ITEM.detalhe"></div>
+                    <p class="card-text">Categoria: {{ ITEM.categoriaPeca.nome }}</p>
+                    <a [routerLink]="['/detalhe/', ITEM.id]" class="btn btn-primary">Eu quero!!</a>
                 </div>
-            }
+            </div>
         </div>
+        }
     </div>
+</div>z

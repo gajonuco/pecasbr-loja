@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Peca } from '../model/Peca';
 import { environment } from '../../environments/environment';
+import { PaginaProduto } from '../model/PaginaProduto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,8 @@ export class PecaService {
 
   constructor(private http: HttpClient){}
   
-  public getAllPecas(): Observable<Peca[]>{
-    return this.http.get<Peca[]>(environment.apiURL+"/peca");
+  public getAllPecas(pageNumber: number){
+    return this.http.get<PaginaProduto>(environment.apiURL+"/peca?pageNumber="+pageNumber);  
   }
 
   public getPecaPeloId(id : number): Observable<Peca>{

@@ -23,19 +23,20 @@
   <div id="divBusca" class="row">
     <div class="col-8 col-sm-8 col-md-9 col-lg-10 col-xl-10">
       <div class="mb-3">
-        <label for="txtCPF" class="form-label">Seu CPF</label>
-        <input type="text" class="form-control" id="txtCPF" [(ngModel)]= "cliente.cpf">
+            <label for="txtTelefone" class="form-label">Seu <b>Whatsapp</b></label>
+            <input type="text" class="form-control" id="txtTelefone" placeholder="Digite seu telefone com DDD"
+                [(ngModel)]="cliente.telefone">
       </div>
     </div>
 
     <div class="col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2">
-      <button id="btnBuscar" type="button" (click)= "buscarCPF()" class="btn btn-primary">
+      <button id="btnBuscar" type="button" (click)= "buscarCliente()" class="btn btn-primary">
         Buscar
       </button>
     </div>
   </div>
 
-  @if (buscouCPF) {
+  @if (buscouTelefone) {
     @if (!achou) {
       <div class="row mt-3">
         <div class="col-12">
@@ -47,12 +48,12 @@
       </div>
     }
 
-    @if(cpfValido){
+    
 
           <div id="divDetalhe" class="mt-3">
       <div class="mb-3">
         <label for="txtNome" class="form-label">Seu Nome</label>
-        <input type="text" class="form-control" id="txtNome" [(ngModel)]= "cliente.nome">
+        <input type="text" class="form-control" id="txtNome" [(ngModel)]= "cliente.nome"  placeholder="Digite seu nome completo">
       </div>
 
       <div class="mb-3">
@@ -63,15 +64,16 @@
       <div class = "row">
         <div class = "col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <div class="mb-3">
-              <label for="txtTelefone" class="form-label">Seu WhatsApp</label>
-              <input type="text" class="form-control" id="txtTelefone" [(ngModel)]= "cliente.telefone">
+                  <label for="txtCpf" class="form-label">Seu CPF</label>
+                    <input type="text" class="form-control" placeholder="Não é obrigatório" id="txtCpf"
+                        [(ngModel)]="cliente.cpf">
             </div>
         </div>
 
         <div class = "col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <div class="mb-3">
               <label for="txtDataNasc" class="form-label">Data de Nascimento</label>
-              <input type="date" class="form-control" id="txtDataNasc" [(ngModel)]= "cliente.dataNasc">
+              <input type="date" class="form-control" inputmode="numeric" id="txtDataNasc" [(ngModel)]= "cliente.dataNasc">
             </div>
         </div>
       </div>
@@ -96,7 +98,7 @@
         <div class="col-8 col-sm-8 col-md-9 col-lg-10 col-xl-10 ">
             <div class="mb-3">
               <label for="txtCep" class="form-label">CEP da sua residência</label>
-              <input type="text" class="form-control" id="txtCep" [(ngModel)]= "cliente.cep">
+              <input type="text" class="form-control" id="txtCep" [(ngModel)]= "cliente.cep"  placeholder="Informe sem pontos ou traços">
             </div>
         </div>
 
@@ -149,6 +151,16 @@
       </div>
 
       }
+
+      <div class="row">
+          <div class="col-12 mb-3 form-control" id="divFrete">
+              <p><b>Frete Previsto: {{msgFrete}}  </b> </p>
+                <div class="form-check form-switch">
+                    <label for="chkRetirar">Prefiro Retirar</label>
+                    <input class="form-check-input" type="checkbox" id="chkRetirar" [(ngModel)]="retirar" (change)="calculaFreteReal()">
+                </div>
+            </div>
+        </div>
       
       <div class="mb-3">
         <label for="txtObservacoes" class="form-label">Observações do seu Pedido</label>
@@ -158,12 +170,85 @@
 
       <div class="row">
         <div class="col-12 text-center">
-          <div class="btn btn-primary" type="button" (click)= "finalizarPedido()">Finalizar Pedido</div>
+
+          @if (!emProcessamento) {
+            <button type="button" class="btn btn-primary"
+                    (click)="finalizarPedido()">
+              Finalizar Pedido
+            </button>
+          }
+
+          @if (emProcessamento) {
+            <span id="loading"></span>
+            <span id="processando">
+              <h4>Processando Pedido</h4>
+            </span>
+          }
+
         </div>
       </div>
     </div>
-  }
+  
 
     }
 
+</div>
+
+    <!-- Toast fixo -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+<!-- No seu template HTML -->
+<div id="liveToast"
+     class="toast align-items-center border-0"
+     role="alert"
+     aria-live="assertive"
+     aria-atomic="true"
+     [ngClass]="{
+        'bg-success': toastType === 'success',
+        'bg-danger': toastType === 'error',
+        'bg-warning': toastType === 'warning',
+        'bg-info': toastType === 'info',
+        'text-white': toastType !== 'warning',
+        'text-dark': toastType === 'warning'
+     }">
+  <div class="d-flex">
+    <div class="toast-body">
+      {{ mensagemToast }}
+    </div>
+    <button type="button"
+            [ngClass]="{
+               'btn-close-white': toastType !== 'warning',
+               'btn-close': toastType === 'warning'
+            }"
+            class="me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"></button>
+  </div>
+</div>
+</div>
+
+<!-- TOAST FIXO -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true"
+        [ngClass]="{
+          'bg-success': toastType === 'success',
+          'bg-danger': toastType === 'error',
+          'bg-warning': toastType === 'warning',
+          'bg-info': toastType === 'info',
+          'text-white': toastType !== 'warning',
+          'text-dark': toastType === 'warning'
+       }">
+
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ mensagemToast }}
+            </div>
+
+            <button type="button" [ngClass]="{
+                'btn-close-white': toastType !== 'warning',
+                'btn-close': toastType === 'warning'
+              }" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+            </button>
+        </div>
+
+    </div>
 </div>

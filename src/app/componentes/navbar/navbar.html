@@ -1,43 +1,48 @@
 <div class="container-fluid">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="logo_autopecas.png" alt="Logo">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="assets/img/logo_autopecas.png" alt="Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categorias de Pecas
+            </a>
+            <ul class="dropdown-menu">
+              @for (CAT_PECA of lista; track lista){
+              <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]">{{ CAT_PECA.nome }}</a>
+              }
 
-
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categorias de Pecas
-          </a>
-          <ul class="dropdown-menu">
-            @for (CAT_PECA of lista; track lista){
-                <a class="dropdown-item" [routerLink] ="['/buscacategoria/', CAT_PECA.id]"
-                >{{ CAT_PECA.nome }}</a>
-            }
-
-            <!--
+              <!--
             <li><a class="dropdown-item" href="#">Categoria 1</a></li>
             <li><a class="dropdown-item" href="#">Categoria 2</a></li>
             <li><a class="dropdown-item" href="#">Categoria 3</a></li> -->
-          </ul>
-        </li>
-        <li class="nav-item">
-            <a class="btn" [routerLink]="'carrinho'"><i class="fa-solid fa-cart-shopping fa-2x" aria-hidden="true"></i><span class="badge text-bg-danger" *ngIf = "numItens > 0">{{numItens}}</span></a>
-        </li>
-      </ul>
-      <div class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Procure sua peça" aria-label="Search" [(ngModel)] = "keyword"/>
-       <button class="btn" (click)= "buscar()"><i class="fa fa-search fa-2x" aria-hidden="true"></i></button> 
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="btn" [routerLink]="'carrinho'">
+              <i class="fa-solid fa-cart-shopping fa-2x" aria-hidden="true"></i>
+
+              @if (numItens > 0) {
+              <span class="badge text-bg-danger">{{ numItens }}</span>
+              }
+            </a>
+          </li>
+
+        </ul>
+        <div class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Procure sua peça" aria-label="Search"
+            [(ngModel)]="keyword" />
+          <button class="btn" (click)="buscar()"><i class="fa fa-search fa-2x" aria-hidden="true"></i></button>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 </div>

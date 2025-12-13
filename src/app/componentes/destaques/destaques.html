@@ -1,18 +1,64 @@
-<div class="container" id ="destaques">
-        <div class ="row mb-3">
-            @for (ITEM of lista; track lista) {
-                <div  class ="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                    <div class="card">
-                    <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.linkFoto }}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">{{ ITEM.nome }}</h5>
-                        <h6 class="card-subtitle text-center "> {{ ITEM.preco | currency:'BRL'}}</h6>
-                        <p class="card-text">{{ ITEM.detalhe }}</p>
-                        <p class="card-text">Categoria: {{ ITEM.categoriaPeca.nome }}</p>
-                        <a [routerLink] ="['/detalhe/', ITEM.id]" class="btn btn-primary">Eu quero!!</a>
-                    </div>
-                    </div>
-                </div>
-            }
+<app-carousel></app-carousel>
+
+<div class="container my-4" id="destaques">
+  <div class="row g-3">
+    @for (ITEM of lista; track lista) {
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.nome }}">
+        @if (ITEM.prontaEntrega === 1){
+        <span id="prontaEntrega" class="badge rounded-pill bg-warning">
+          Pronta Entrega!
+        </span>
+        }
+
+
+        <div class="card-body d-flex flex-column justify-content-between">
+          <div>
+            <h6 class="card-title text-center mb-1">{{ ITEM.nome }}</h6>
+            <h5 class="card-subtitle mb-2 text-center">
+              @if (ITEM.precoPromo === 0) {
+              Por: {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
+              } @else if(ITEM.preco !== ITEM.precoPromo ) {
+              De: <del>{{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}</del>
+              <br />
+              Por: {{ ITEM.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
+              }
+            </h5>
+
+            <p class="card-text small text-muted text-center mb-2">{{ ITEM.categoriaPeca.nome }}</p>
+          </div>
+
+
+          <a [routerLink]="['/detalhe/', ITEM.id]" class="btn btn-primary w-100 mt-auto">Eu quero!</a>
         </div>
+      </div>
     </div>
+    }
+
+    <div class="row mt-5">
+      <div class="col-12 text-center">
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+
+          @if (previousPage !== 0) {
+          <button type="button" class="btn btn-outline-primary btn-natura" (click)="recuperarProdutos(previousPage)">
+            <i class="fas fa-backward"></i>
+          </button>
+          }
+
+          <button type="button" class="btn btn-outline-primary btn-natura">
+            <b>{{ pageNumber }}</b>
+          </button>
+
+          @if (nextPage !== 0) {
+          <button type="button" class="btn btn-outline-primary btn-natura" (click)="recuperarProdutos(nextPage)">
+            <i class="fas fa-forward"></i>
+          </button>
+          }
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

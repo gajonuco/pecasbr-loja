@@ -23,7 +23,26 @@
 
     <div class="row">
         <div class="col-12 text-center">
-            <p><b>Sobre Pagamentos:</b></p>
+        <p><b>Sobre Seu Frete:</b></p>
+        @if (detalhePedido.retirar == 1) {
+        <p>
+            Você optou por retirar o pedido conosco. Entraremos em contato para combinarmos o endereço.
+            Nosso ponto de Retirada é no Jardim D'Abril em Osasco
+        </p>
+        }
+        @if (detalhePedido.retirar == 0 && detalhePedido.valorFrete != 0) {
+        <p>
+            Seu Frete estimado para a região é de R$ {{ detalhePedido.valorFrete }}
+            e já está incluso no valor total a ser pago
+        </p>
+        }
+        @if (detalhePedido.retirar == 0 && detalhePedido.valorFrete == 0) {
+        <p>
+            Ainda não temos um valor definido para seu frete. Nossos fretes iniciam em 4,99,
+            mas vamos fazer o cálculo de forma manual e entraremos em contato
+        </p>
+        }
+        <p><b>Sobre Pagamentos:</b></p>
             <p>Em breve entraremos em contato para combinarmos a forma de pagamento e sanar eventuais dúvidas</p>
             <p>Sigo à disposição pelas redes sociais e Whastapp (11) 96357-3218</p>
             <p>Veja o resumo dos itens que você comprou</p>            

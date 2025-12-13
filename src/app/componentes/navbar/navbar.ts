@@ -16,54 +16,49 @@ import { BuscarProdutoByKey } from '../../servicos/buscar-produto-by-key';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class Navbar implements OnInit{
+export class Navbar implements OnInit {
 
   public lista: CategoriaPeca[] = [];
   public numItens!: number;
   private pedido!: Pedido;
   public keyword!: string;
-  constructor( private service: CategoriaPecaService,
-              private carService: CarrinhoService,
-              private router: Router,
-              private busca: BuscarProdutoByKey
-  ){}
+  constructor(private service: CategoriaPecaService,
+    private carService: CarrinhoService,
+    private router: Router,
+    private busca: BuscarProdutoByKey
+
+  ) { this.numItens = 0; }
 
 
   ngOnInit(): void {
 
-    this.numItens = 0;
     const carrinhoString = localStorage.getItem("AdicionarCarrinho")
 
-    if(carrinhoString){
+    if (carrinhoString) {
       this.pedido = JSON.parse(carrinhoString)
       this.numItens = this.pedido.itensPedido.length;
+      console.log("numero de itens " + this.numItens)
     }
 
-    
 
-    this.service.getAllCategoriasPecas()
-      .subscribe({
-        next: (res) => {
-          this.lista = res;
-          console.log(res);
-        },
-        error: (err) => console.error(err)
-      });
 
-    this.carService.getNumberOfItens()
-      .subscribe({
-        next:(res) => {
-          this.numItens = res
-        }
-      })
+    this.service.getAllCategoriasPecas().subscribe({
+      next: (res: CategoriaPeca[]) => this.lista = res
+    });
 
-  }
-
-  public buscar(){
-      if(this.keyword){
-        this.busca.getKeyWord().next(this.keyword)
-         this.router.navigate(['busca']);
+    this.carService.getNumberOfItens().subscribe({
+      next: (res) => {
+        this.numItens = res;
       }
+    });
+
   }
-  
+
+  public buscar() {
+    if (this.keyword) {
+      this.busca.getKeyWord().next(this.keyword)
+      this.router.navigate(['busca']);
+    }
+  }
+
 }

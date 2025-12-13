@@ -11,7 +11,12 @@ export class ClienteService {
   
   constructor(private http: HttpClient){}
 
-    public buscarClientePeloCPF(cpf : string): Observable<Cliente>{
-      return this.http.get<Cliente>(environment.apiURL+"/cliente/" + cpf);
-    }
+  public buscarClientePeloCPF(cpf : string): Observable<Cliente>{
+    return this.http.get<Cliente>(environment.apiURL+"/cliente/" + cpf);
+  }
+
+    
+  public buscarClientePeloTelefone(telefone:string){
+    return this.http.get<Cliente>(environment.apiURL+"/cliente/"+telefone);
+  }
 }

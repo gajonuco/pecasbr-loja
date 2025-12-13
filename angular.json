@@ -10,62 +10,65 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-        "build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "tsConfig": "tsconfig.app.json",
-            "assets": [
+      "build": {
+        "builder": "@angular-devkit/build-angular:browser",
+        "options": {
+          "outputPath": "dist/oficina_mecanica/browser",
+          "index": "src/index.html",
+          "main": "src/main.ts",
+          "polyfills": ["zone.js"],
+          "tsConfig": "tsconfig.app.json",
+          "assets": [
+            "src/favicon.ico",
+            "src/manifest.webmanifest",
+            {
+              "glob": "**/*",
+              "input": "src/assets",
+              "output": "assets"
+            }
+          ],
+          "styles": ["src/styles.css"]
+        },
+        "configurations": {
+          "production": {
+            "fileReplacements": [
               {
-                "glob": "**/*",
-                "input": "src/public",
-                "output": "/"
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.prod.ts"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "budgets": [
+              { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
+              { "type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB" }
+            ],
+
+            "outputHashing": "all",
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
-              "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
-          },
-          "defaultConfiguration": "production"
+          "development": {
+            "buildOptimizer": false,
+            "optimization": false,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "sourceMap": true,
+            "namedChunks": true
+          }
         },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "oficina_mecanica:build:production"
-            },
-            "development": {
-              "buildTarget": "oficina_mecanica:build:development"
-            }
+        "defaultConfiguration": "production"
+      },
+      "serve": {
+        "builder": "@angular/build:dev-server",
+        "configurations": {
+          "production": {
+            "buildTarget": "oficina_mecanica:build:production"
           },
-          "defaultConfiguration": "development"
+          "development": {
+            "buildTarget": "oficina_mecanica:build:development"
+          }
         },
+        "defaultConfiguration": "development"
+      },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
@@ -91,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "d0eecf02-09ed-478b-95a8-ecf2a9528109"
   }
 }

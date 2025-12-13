@@ -30,3 +30,31 @@
 #btnModal {
   visibility: hidden;
 }
+
+#loading{
+    display: block;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid  #02C2C8;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#processando{
+    display: block;
+    color:  #233A5F;
+    text-shadow: 1px 1px 3px black;
+}
+
+#divFrete{
+    font-size: large;
+    background-color:#5d8968; 
+    color: rgba(0,0,0,1);
+}

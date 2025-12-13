@@ -25,8 +25,8 @@ export class Cliente {
 
   public reset(): void{
     this.nome = '';
+    this.cpf = ''
     this.email = '';
-    this.telefone = '';
     this.dataNasc = '';
     this.cep = '';
     this.logradouro = '';
