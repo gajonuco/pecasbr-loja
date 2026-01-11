@@ -10,7 +10,7 @@ export class Peca {
     public prontaEntrega!: number;
     public disponivel!: number;
     public quantidadeEstoque!: number;
-    public estoqueMininmo!: number;
+    public estoqueMinimo!: number;
     public estoqueCritico!: number;
     public categoriaPeca!: CategoriaPeca;
 }

@@ -1,4 +1,4 @@
-<app-carousel></app-carousel>
+<!-- <app-carousel></app-carousel> -->
 
 <div class="container my-4" id="destaques">
   <div class="row g-3">
@@ -6,11 +6,25 @@
     <div class="col-6 col-sm-4 col-md-3 col-lg-2">
       <div class="card h-100 shadow-sm">
         <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.nome }}">
-        @if (ITEM.prontaEntrega === 1){
-        <span id="prontaEntrega" class="badge rounded-pill bg-warning">
-          Pronta Entrega!
-        </span>
-        }
+
+        <div class="badges-container">
+          @if (ITEM.prontaEntrega === 1) {
+          <span id="prontaEntrega" class="badge rounded-pill">
+            Pronta Entrega!
+          </span>
+          }
+
+          @if (ITEM.quantidadeEstoque <= ITEM.estoqueCritico) { <span id="estoqueCritico" class="badge rounded-pill">
+            Estoque Crítico!
+            </span>
+            } @else if (ITEM.quantidadeEstoque <= ITEM.estoqueMinimo) { <span id="estoqueBaixo"
+              class="badge rounded-pill">
+              Baixo Estoque!
+              </span>
+              }
+        </div>
+
+
 
 
         <div class="card-body d-flex flex-column justify-content-between">

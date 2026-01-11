@@ -4,6 +4,7 @@ import { Peca } from '../../model/Peca';
 import { PecaService } from '../../servicos/peca-service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { PaginaProduto } from '../../model/PaginaProduto';
 
 @Component({
   selector: 'app-busca-palavra-chave',
@@ -13,23 +14,47 @@ import { RouterModule } from '@angular/router';
 })
 export class BuscaPalavraChave {
 
-  public keyword! : string
-  public lista: Peca[] = []
 
-  constructor(private busca:BuscarProdutoByKey,
-              private service: PecaService
-  ){
-      busca.keyword.subscribe({
-        next:(res: string) => {
-          this.keyword = res;
-          this.service.getProdutoPelaCategoriaChave(this.keyword).subscribe({
-            next: (res: Peca[]) => {
-              this.lista = res;
-            }}
-          )}
-      })
+  public keyword!: string;
+  public lista: Peca[] = [];
+  public pageNumber: number;
+  public previousPage!: number;
+  public nextPage!: number;
+  constructor(private busca: BuscarProdutoByKey,
+    private service: PecaService) {
+
+    this.pageNumber = 1;
+    this.busca.getKeyWord().subscribe(
+      (res: string) => {
+        this.keyword = res;
+        this.recuperarProdutos(this.pageNumber);
+      }
+    );
   }
 
+  ngOnInit(): void {
 
+  }
 
-}
+  public recuperarProdutos(page: number) {
+    
+this.service.getProdutosPelaPalavraChave(this.keyword, page - 1).subscribe({
+  next: (res: PaginaProduto) => {
+    this.lista = res.content;
+    this.pageNumber = res.number + 1;
+    this.previousPage = this.pageNumber - 1;
+    
+    if (res.number == res.totalPages - 1) {
+      this.nextPage = 0;
+    } else {
+      this.nextPage = this.pageNumber + 1;
+    }
+  },
+  error: (err) => {
+    console.error('Erro ao buscar produtos:', err);
+    this.lista = [];
+  }
+});
+
+ }}
+

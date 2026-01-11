@@ -1,6 +1,6 @@
 {
-  "name": "PecasBR Loja",
-  "short_name": "PecasBR",
+  "name": "PeçasBR Loja",
+  "short_name": "Loja",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

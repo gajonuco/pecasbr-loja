@@ -13,13 +13,16 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Categorias de Pecas
+                CATEGORÍAS
             </a>
             <ul class="dropdown-menu">
-              @for (CAT_PECA of lista; track lista){
+              @if (lista && lista.length > 0) {
+              @for (CAT_PECA of lista; track CAT_PECA.id){
               <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]">{{ CAT_PECA.nome }}</a>
               }
-
+              } @else {
+              <li class="dropdown-item disabled">Carregando categorias...</li>
+              }
               <!--
             <li><a class="dropdown-item" href="#">Categoria 1</a></li>
             <li><a class="dropdown-item" href="#">Categoria 2</a></li>

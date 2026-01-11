@@ -24,8 +24,8 @@ export class PecaService {
     return this.http.get<Peca[]>(environment.apiURL+"/peca/categoria/" + idCategoria)
   }
 
-  public getProdutoPelaCategoriaChave(keyword: string): Observable<Peca[]>{
-    return this.http.get<Peca[]>(environment.apiURL+"/peca/busca?key=" + keyword)
+  public getProdutosPelaPalavraChave(keyword: string, pageNumber:number) :Observable<any>{
+    return this.http.get(environment.apiURL+"/peca/busca?key="+keyword+"&pageNumber="+pageNumber);
   }
 }
 
