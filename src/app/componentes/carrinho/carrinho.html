@@ -1,97 +1,158 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12 text-center">
-      <h3>Seu carrinho</h3>
-    </div>
-  </div>
+<!-- carrinho.component.html -->
 
+<section class="carrinho-page">
+
+  <!-- Cabeçalho -->
+  <header class="carrinho-header">
+    <p class="label-secao">{{ 'carrinho.label_secao' | translate }}</p>
+    <h2 class="titulo-secao">{{ 'carrinho.titulo' | translate }}</h2>
+  </header>
+
+  <!-- Carrinho vazio -->
   @if (vazio) {
-  <div class="row">
-    <div class="col-12">
-      <h3>Seu carrinho está vazio!</h3>
+    <div class="carrinho-vazio">
+      <div class="vazio-icone">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <p class="vazio-titulo">{{ 'carrinho.vazio_titulo' | translate }}</p>
+      <p class="vazio-subtitulo">{{ 'carrinho.vazio_sub' | translate }}</p>
     </div>
-  </div>
-  }@else {
-  <div id="itens" >
-    <div class="row">
-      <div class="col-12">
-        <h3>Valor Total R$ {{ pedido.valorTotal | number: "1.2-2"}}</h3>
-        <br>
-      </div>
-    </div>
-  
 
-    @for (ITEM of pedido.itensPedido; track ITEM.peca.id){
-            <div class="row itemPedido" >
-      <div class = "col-6 col-sm-6 col-md-3 col-lg-2 col-xl-2">
-        <img src= "{{ ITEM.peca.linkFoto }}" width="80%">
-      </div>
-      <div class = "col-6 col-sm-6 col-md-4 col-lg-5 col-xl-5 text-center">
-        <label for="nome">Produto</label>
-            <h4 id ="nome">{{ ITEM.peca.nome }}</h4>
-            <i (click) ="removerItem(ITEM.peca.id)" class="fa-solid fa-trash"></i>
-      </div>
-      <div class = "col-6 col-sm-4 col-md-2 col-lg-2 col-xl-2 text-center">
-            <label for = "prUni">Preco Unitário</label>
-            <h5 id="prUni">R$ {{ ITEM.precoUnitario  | number: '1.1-2' }}</h5>
-      </div>
-      <div class = "col-6 col-sm-4 col-md-1 col-lg-1 col-xl-1 text-center">
-        <label for = "qtd">Quant.</label>
-             <h5 id="qtd">{{ ITEM.qtdtItem }}</h5>
-      </div>
-      <div class = "col-6 col-sm-4 col-md-2 col-lg-2 col-xl-2 text-center">
-        <label for = "prTotal">Preço Total</label>
-             <h5 id ="prTotal">R$ {{ ITEM.precoTotal | number: '1.1-2' }}</h5>
-      </div>
-    </div>
-    }
+  } @else {
 
-    <div class="row">
-      <div class="col-12 text-center">
-        <h3> Valor Total R$ {{pedido.valorTotal | number: '1.2-2'}}</h3>
-        <br/>
-      </div>
-    </div>
-    @if (pedido != null && pedido.itensPedido.length > 0) {
-      <div class = row>
-      <div class = "col-6 text-center">
-        <br>
-        <button class="btn btn-primary" (click)= "continuar()">Continuar comprando</button>
-      </div>
-      <div class = "col-6 text-center">
-        <br>
-        <button class="btn btn-primary" (click)= "efetivar()">Finalizar compra</button>
-      </div>
-    </div>
-    }
+    <div class="carrinho-layout">
 
-  </div>
-  }
-</div>
+      <!-- Lista de itens -->
+      <div class="itens-lista">
 
-<!-- TOAST FIXO -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true"
-        [ngClass]="{
-          'bg-success': toastType === 'success',
-          'bg-danger': toastType === 'error',
-          'bg-warning': toastType === 'warning',
-          'bg-info': toastType === 'info',
-          'text-white': toastType !== 'warning',
-          'text-dark': toastType === 'warning'
-       }">
+        @for (ITEM of pedido.itensPedido; track ITEM.peca.id) {
+          <article class="item-linha">
 
-        <div class="d-flex">
-            <div class="toast-body">
-                {{ mensagemToast }}
+            <!-- Imagem -->
+            <div class="item-imagem-wrap">
+              <img [src]="ITEM.peca.linkFoto" [alt]="ITEM.peca.nome" class="item-imagem">
             </div>
 
-            <button type="button" [ngClass]="{
-                'btn-close-white': toastType !== 'warning',
-                'btn-close': toastType === 'warning'
-              }" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
-            </button>
+            <!-- Nome + variação + remover -->
+            <div class="item-info">
+              <span class="item-categoria">{{ ITEM.peca.categoriaPeca?.nome }}</span>
+              <h3 class="item-nome">{{ ITEM.peca.nome }}</h3>
+
+              <!-- Cor e tamanho escolhidos -->
+              @if (ITEM.corEscolhida || ITEM.tamanhoEscolhido) {
+                <div class="item-variacao">
+                  @if (ITEM.corEscolhida) {
+                    <span class="variacao-tag">
+                      <span class="variacao-swatch"
+                        [style.background]="ITEM.variacao?.hexCode ?? '#ccc'"
+                        [title]="ITEM.corEscolhida">
+                      </span>
+                      {{ ITEM.corEscolhida }}
+                    </span>
+                  }
+                  @if (ITEM.corEscolhida && ITEM.tamanhoEscolhido) {
+                    <span class="variacao-sep">·</span>
+                  }
+                  @if (ITEM.tamanhoEscolhido) {
+                    <span class="variacao-tag">{{ ITEM.tamanhoEscolhido }}</span>
+                  }
+                </div>
+              }
+
+              <button class="btn-remover" (click)="removerItem(ITEM.peca.id)"
+                [attr.aria-label]="'carrinho.remover' | translate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6M14 11v6"/>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+                {{ 'carrinho.remover' | translate }}
+              </button>
+            </div>
+
+            <!-- Preço unitário -->
+            <div class="item-campo">
+              <span class="campo-label">{{ 'carrinho.unitario' | translate }}</span>
+              <span class="campo-valor">{{ ITEM.precoUnitario | currency:'BRL':'symbol':'1.2-2' }}</span>
+            </div>
+
+            <!-- Quantidade -->
+            <div class="item-campo">
+              <span class="campo-label">{{ 'carrinho.quantidade' | translate }}</span>
+              <span class="campo-valor campo-valor--destaque">{{ ITEM.qtdtItem }}</span>
+            </div>
+
+            <!-- Subtotal -->
+            <div class="item-campo">
+              <span class="campo-label">{{ 'carrinho.subtotal' | translate }}</span>
+              <span class="campo-valor campo-valor--total">{{ ITEM.precoTotal | currency:'BRL':'symbol':'1.2-2' }}</span>
+            </div>
+
+          </article>
+        }
+
+      </div>
+
+      <!-- Resumo lateral -->
+      <aside class="resumo-card">
+
+        <p class="resumo-titulo">{{ 'carrinho.resumo_titulo' | translate }}</p>
+
+        <div class="resumo-linha">
+          <span class="resumo-label">{{ 'carrinho.subtotal' | translate }}</span>
+          <span class="resumo-valor">{{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2' }}</span>
         </div>
 
+        <hr class="resumo-separador">
+
+        <div class="resumo-linha resumo-linha--total">
+          <span class="resumo-label">{{ 'carrinho.total' | translate }}</span>
+          <span class="resumo-valor resumo-valor--grande">
+            {{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2' }}
+          </span>
+        </div>
+
+        @if (pedido != null && pedido.itensPedido.length > 0) {
+          <button class="btn-finalizar" (click)="efetivar()">
+            {{ 'carrinho.finalizar' | translate }}
+          </button>
+          <button class="btn-continuar" (click)="continuar()">
+            {{ 'carrinho.continuar' | translate }}
+          </button>
+        }
+
+      </aside>
+
     </div>
+
+  }
+
+</section>
+
+<!-- Toast de notificação -->
+<div class="toast-wrapper" [class.toast-wrapper--visivel]="toastVisivel">
+  <div
+    class="toast-custom"
+    [class.toast-custom--sucesso]="toastType === 'success'"
+    [class.toast-custom--erro]="toastType === 'error'"
+    [class.toast-custom--aviso]="toastType === 'warning'"
+    [class.toast-custom--info]="toastType === 'info'"
+    role="alert"
+    aria-live="assertive">
+
+    <div class="toast-dot"></div>
+    <span class="toast-mensagem">{{ mensagemToast }}</span>
+
+    <button class="toast-fechar" (click)="toastVisivel = false"
+      [attr.aria-label]="'carrinho.fechar' | translate">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
+      </svg>
+    </button>
+
+  </div>
 </div>

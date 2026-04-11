@@ -1,53 +1,67 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h3>Resultado da búsqueda: {{keyword}}</h3>
-        </div>
+<!-- buscakeyword.component.html -->
+
+<section class="busca-section">
+
+  <header class="busca-header">
+    <p class="label-secao">{{ 'busca.label_secao' | translate }}</p>
+    <h2 class="titulo-secao">{{ keyword }}</h2>
+  </header>
+
+  @if (lista && lista.length === 0) {
+    <div class="busca-vazia">
+      <p class="vazia-titulo">{{ 'busca.nenhum_resultado_titulo' | translate }}</p>
+      <p class="vazia-subtitulo">{{ 'busca.nenhum_resultado_sub' | translate }}</p>
     </div>
+  }
 
-    <div class="row mb-3">
-        @for (ITEM of lista; track ITEM.id) {
-    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-      <div class="card h-100 shadow-sm">
-                <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.linkFoto }}">
-                <div class="badges-container">
-                    @if (ITEM.prontaEntrega === 1) {
-                    <span id="prontaEntrega" class="badge rounded-pill">
-                        Pronta Entrega!
-                    </span>
-                    }
+  <div class="grid-produtos">
+    @for (ITEM of lista; track ITEM.id) {
 
-                    @if (ITEM.quantidadeEstoque <= ITEM.estoqueCritico) { <span id="estoqueCritico"
-                        class="badge rounded-pill">
-                        Estoque Crítico!
-                        </span>
-                        } @else if (ITEM.quantidadeEstoque <= ITEM.estoqueMinimo) { <span id="estoqueBaixo"
-                            class="badge rounded-pill">
-                            Baixo Estoque!
-                            </span>
-                            }
-                </div>
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h6 class="card-title text-center mb-1">{{ ITEM.nome }}</h6>
-                        <h5 class="card-subtitle mb-2 text-center">
-                            @if (ITEM.precoPromo === 0) {
-                            Por: {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
-                            } @else if(ITEM.preco !== ITEM.precoPromo ) {
-                            De: <del>{{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}</del>
-                            <br />
-                            Por: {{ ITEM.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
-                            }
-                        </h5>
+      <article class="card-produto">
 
-                        <p class="card-text small text-muted text-center mb-2">{{ ITEM.categoriaPeca.nome }}</p>
-                    </div>
+        <div class="img-wrapper">
+          <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
 
+          <div class="badges-wrap">
+            @if (ITEM.prontaEntrega === 1) {
+              <span class="badge-pill badge-entrega">{{ 'badges.pronta_entrega' | translate }}</span>
+            }
+            @if (ITEM.quantidadeEstoque <= ITEM.estoqueCritico) {
+              <span class="badge-pill badge-critico">{{ 'badges.estoque_critico' | translate }}</span>
+            } @else if (ITEM.quantidadeEstoque <= ITEM.estoqueMinimo) {
+              <span class="badge-pill badge-baixo">{{ 'badges.baixo_estoque' | translate }}</span>
+            }
+          </div>
 
-                    <a [routerLink]="['/detalhe/', ITEM.id]" class="btn btn-primary w-100 mt-auto">Eu quero!</a>
-                </div>
-            </div>
+          <div class="img-overlay"></div>
         </div>
-        }
-    </div>
-</div>
+
+        <div class="card-corpo">
+          <span class="categoria-nome">{{ ITEM.categoriaPeca.nome }}</span>
+
+          <h3 class="produto-nome">{{ ITEM.nome }}</h3>
+
+          <div class="preco-wrap">
+            @if (ITEM.precoPromo === 0 || ITEM.preco === ITEM.precoPromo) {
+              <span class="preco-normal">
+                {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            } @else {
+              <span class="preco-de">
+                {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+              <span class="preco-por">
+                {{ ITEM.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            }
+          </div>
+
+          <a [routerLink]="['/detalhe/', ITEM.id]" class="btn-quero">{{ 'busca.btn_quero' | translate }}</a>
+        </div>
+
+      </article>
+
+    }
+  </div>
+
+</section>

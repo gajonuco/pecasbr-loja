@@ -1,21 +1,70 @@
-<div class="container-fluid">
-  <br>
-  <div class="row" id="rodape">
-    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 text-center" id="coluna1">
-      <h4>TESTE</h4>
+<!-- rodape.component.html -->
+
+<footer class="rodape">
+  <div class="rodape-inner">
+
+    <!-- Coluna 1 — Marca -->
+    <div class="rodape-col rodape-col--marca">
+      <a routerLink="/" class="rodape-logo-link"
+        [attr.aria-label]="'navbar.pagina_inicial' | translate">
+        <img src="assets/img/ecommerce_woman.png" alt="Logo" class="rodape-logo" />
+      </a>
+      <p class="rodape-slogan">{{ 'rodape.slogan' | translate }}</p>
     </div>
-    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 text-center" id="coluna2">
-      <h6>Entre em contato</h6>
-      <p><i class="fa-brands fa-whatsapp"></i> <a [href]="'https://wa.me/55'"
-          target="_blank" class="whatsapp-link">
-          <i class="pi pi-whatsapp me-2"></i>
-          95991502939
-        </a></p>
-      <p><i class="fa-solid fa-globe"></i> www.pecasbr.com</p>
+
+    <!-- Coluna 2 — Contato -->
+    <div class="rodape-col">
+      <p class="rodape-col-titulo">{{ 'rodape.contato' | translate }}</p>
+      <ul class="rodape-lista">
+        <li>
+          <a href="https://wa.me/5595991502939" target="_blank"
+            rel="noopener noreferrer" class="rodape-link">
+            <svg class="rodape-icone" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.532 5.855L.057 23.882l6.19-1.624A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.79 9.79 0 0 1-5.012-1.375l-.36-.214-3.724.977.995-3.63-.235-.374A9.79 9.79 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+            </svg>
+            (95) 99150-2939
+          </a>
+        </li>
+        <li>
+          <span class="rodape-texto">
+            <svg class="rodape-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            www.pecasbr.com
+          </span>
+        </li>
+      </ul>
     </div>
-    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 text-center" id=" coluna3">
-      <h6>Siga nas redes sociais</h6>
-      <p><i class="fa-brands fa-instagram"></i>&#64;pecasbr</p>
+
+    <!-- Coluna 3 — Redes sociais -->
+    <div class="rodape-col">
+      <p class="rodape-col-titulo">{{ 'rodape.redes_sociais' | translate }}</p>
+      <ul class="rodape-lista">
+        <li>
+          <a href="https://instagram.com/pecasbr" target="_blank"
+            rel="noopener noreferrer" class="rodape-link">
+            <svg class="rodape-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+            </svg>
+            &#64;pecasbr
+          </a>
+        </li>
+      </ul>
     </div>
+
   </div>
-</div>
+
+  <!-- Linha inferior -->
+  <div class="rodape-bottom">
+    <p class="rodape-copy">
+      &copy; {{ anoAtual }} {{ 'rodape.direitos' | translate }}
+    </p>
+  </div>
+
+</footer>

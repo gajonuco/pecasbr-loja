@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { BuscarProdutoByKey } from '../../servicos/buscar-produto-by-key';
+import { BuscarProdutoByKey } from '../../services/buscar-produto-by-key';
 import { Peca } from '../../model/Peca';
-import { PecaService } from '../../servicos/peca-service';
+import { PecaService } from '../../services/peca-service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PaginaProduto } from '../../model/PaginaProduto';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-busca-palavra-chave',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './busca-palavra-chave.html',
-  styleUrl: './busca-palavra-chave.css'
+  styleUrl: './busca-palavra-chave.scss'
 })
 export class BuscaPalavraChave {
 
@@ -37,13 +38,13 @@ export class BuscaPalavraChave {
   }
 
   public recuperarProdutos(page: number) {
-    
+
 this.service.getProdutosPelaPalavraChave(this.keyword, page - 1).subscribe({
   next: (res: PaginaProduto) => {
     this.lista = res.content;
     this.pageNumber = res.number + 1;
     this.previousPage = this.pageNumber - 1;
-    
+
     if (res.number == res.totalPages - 1) {
       this.nextPage = 0;
     } else {

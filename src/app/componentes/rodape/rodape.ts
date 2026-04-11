@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-rodape',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './rodape.html',
-  styleUrl: './rodape.css'
+  styleUrl: './rodape.scss'
 })
 export class Rodape {
 
+  anoAtual = new Date().getFullYear();
 }

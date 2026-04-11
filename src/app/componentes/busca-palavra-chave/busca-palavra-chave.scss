@@ -1,0 +1,291 @@
+/* buscakeyword.component.scss
+   ─────────────────────────────────────────────────────────────
+   Todos os tokens e estilos de card/grid são idênticos ao
+   busca.component.scss. Apenas o estado vazio é adicionado.
+   ─────────────────────────────────────────────────────────────
+*/
+
+/* ─────────────────────────────────────────
+   Tokens — idênticos ao design system
+   ───────────────────────────────────────── */
+:host {
+  --cor-terracota:       #8B5E52;
+  --cor-terracota-claro: #C9A99A;
+  --cor-terracota-suave: #F5EDE9;
+
+  --cor-badge-entrega-bg:    #E8F5E2;
+  --cor-badge-entrega-texto: #3B6D11;
+  --cor-badge-entrega-borda: #C0DD97;
+
+  --cor-badge-baixo-bg:      #FAEEDA;
+  --cor-badge-baixo-texto:   #854F0B;
+  --cor-badge-baixo-borda:   #FAC775;
+
+  --cor-badge-critico-bg:    #FCEBEB;
+  --cor-badge-critico-texto: #A32D2D;
+  --cor-badge-critico-borda: #F7C1C1;
+
+  --fonte-display: 'Cormorant Garamond', Georgia, serif;
+  --fonte-corpo:   'Jost', sans-serif;
+
+  --raio-card:  2px;
+  --raio-badge: 2px;
+  --raio-botao: 2px;
+  --transicao:  0.2s ease;
+}
+
+/* ─────────────────────────────────────────
+   Seção
+   ───────────────────────────────────────── */
+.busca-section {
+  font-family: var(--fonte-corpo);
+  padding: 2.5rem 1rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────
+   Cabeçalho — keyword em destaque display
+   ───────────────────────────────────────── */
+.busca-header {
+  margin-bottom: 2rem;
+}
+
+.label-secao {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cor-terracota);
+  margin: 0 0 4px;
+}
+
+.titulo-secao {
+  font-family: var(--fonte-display);
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #2C2520;
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* ─────────────────────────────────────────
+   Estado vazio
+   ───────────────────────────────────────── */
+.busca-vazia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #fff;
+  border: 0.5px solid #E5DDD8;
+  border-radius: var(--raio-card);
+  margin-bottom: 1.5rem;
+}
+
+.vazia-titulo {
+  font-family: var(--fonte-display);
+  font-size: 1.3rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #2C2520;
+  margin: 0 0 8px;
+}
+
+.vazia-subtitulo {
+  font-size: 12px;
+  font-weight: 300;
+  color: #B0A098;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   Grid
+   ───────────────────────────────────────── */
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 480px)  { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 768px)  { grid-template-columns: repeat(4, 1fr); }
+  @media (min-width: 1024px) { grid-template-columns: repeat(5, 1fr); }
+  @media (min-width: 1280px) { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ─────────────────────────────────────────
+   Card de produto
+   ───────────────────────────────────────── */
+.card-produto {
+  background: #fff;
+  border: 0.5px solid #E5DDD8;
+  border-radius: var(--raio-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transicao), transform var(--transicao);
+
+  &:hover {
+    border-color: var(--cor-terracota-claro);
+    transform: translateY(-2px);
+
+    .img-overlay { opacity: 1; }
+    .produto-img { transform: scale(1.04); }
+  }
+}
+
+/* Imagem */
+.img-wrapper {
+  position: relative;
+  background: #F7F3F1;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.produto-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(139, 94, 82, 0.06);
+  opacity: 0;
+  transition: opacity var(--transicao);
+  pointer-events: none;
+}
+
+/* Badges */
+.badges-wrap {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 2;
+}
+
+.badge-pill {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--raio-badge);
+  border: 0.5px solid transparent;
+  display: inline-block;
+  line-height: 1.5;
+}
+
+.badge-entrega {
+  background: var(--cor-badge-entrega-bg);
+  color: var(--cor-badge-entrega-texto);
+  border-color: var(--cor-badge-entrega-borda);
+}
+
+.badge-baixo {
+  background: var(--cor-badge-baixo-bg);
+  color: var(--cor-badge-baixo-texto);
+  border-color: var(--cor-badge-baixo-borda);
+}
+
+.badge-critico {
+  background: var(--cor-badge-critico-bg);
+  color: var(--cor-badge-critico-texto);
+  border-color: var(--cor-badge-critico-borda);
+}
+
+/* Corpo */
+.card-corpo {
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.categoria-nome {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B0A098;
+}
+
+.produto-nome {
+  font-family: var(--fonte-display);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.3;
+  color: #2C2520;
+  margin: 0;
+}
+
+/* Preço */
+.preco-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 2px;
+}
+
+.preco-normal {
+  font-size: 14px;
+  font-weight: 400;
+  color: #2C2520;
+}
+
+.preco-de {
+  font-size: 11px;
+  font-weight: 300;
+  color: #B0A098;
+  text-decoration: line-through;
+}
+
+.preco-por {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cor-terracota);
+  letter-spacing: 0.01em;
+}
+
+/* Botão */
+.btn-quero {
+  display: block;
+  margin-top: auto;
+  padding: 12px 0;
+  width: 100%;
+  background: transparent;
+  border: 0.5px solid var(--cor-terracota-claro);
+  border-radius: var(--raio-botao);
+  font-family: var(--fonte-corpo);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cor-terracota);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transicao), color var(--transicao), border-color var(--transicao);
+
+  &:hover {
+    background: var(--cor-terracota);
+    color: #fff;
+    border-color: var(--cor-terracota);
+    text-decoration: none;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

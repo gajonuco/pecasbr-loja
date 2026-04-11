@@ -1,59 +1,158 @@
-# OficinaMecanica
+# Fashion Store
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.3.
+## Visão geral
 
-## Development server
+`Fashion Store` é uma aplicação front-end construída com Angular 20 para um e-commerce de moda feminina. O projeto foi desenvolvido com foco em escalabilidade, experiência de compra responsiva e integração com serviços externos de backend, tradução e comunicação em tempo real.
 
-To start a local development server, run:
+A proposta da aplicação inclui:
+- catálogo de produtos femininos com categorias, destaques e filtros
+- pesquisa por palavra-chave com feedback imediato
+- carrinho de compras com atualização dinâmica de itens e valores
+- cálculo de frete via CEP e finalização de pedidos
+- geração de recibo e histórico de pedidos
+- suporte a múltiplos idiomas (`pt`, `es`)
+- arquitetura modular para manutenção e testes
+
+## Tecnologias principais
+
+- Angular 20.3
+- TypeScript 5.9
+- RxJS 7
+- `@ngx-translate/core` e `@ngx-translate/http-loader`
+- `@angular/fire` e `firebase`
+- `@stomp/stompjs` e `sockjs-client`
+- `ngx-mask`
+- `jwt-decode`
+- Karma, Jasmine e Angular TestBed
+
+## Estrutura do projeto
+
+- `src/app/` — base da aplicação Angular
+  - `componentes/` — componentes UI e páginas principais
+  - `services/` — serviços de domínio e integração com APIs
+  - `model/` — interfaces e contratos de dados
+  - `environments/` — configuração de ambiente para desenvolvimento e produção
+- `src/assets/i18n/` — traduções de interface (`pt`, `es`)
+- `src/styles.scss` — estilos globais e variáveis compartilhadas
+- `angular.json` — configuração de build, serve e budgets de produção
+- `package.json` — dependências e scripts do projeto
+- `src/manifest.webmanifest` — configuração PWA
+- `ngsw-config.json` — configuração de service worker
+
+## Design e arquitetura
+
+A aplicação segue princípios de separação de responsabilidades:
+- componentes cuidam da renderização e eventos de interface
+- serviços centralizam chamadas HTTP e comunicação entre camadas
+- modelos em TypeScript definem contratos de dados consistentes
+- traduções e configuração ficam isoladas em assets e environments
+
+## Integrações principais
+
+- Firebase para persistência, autenticação e notificações de backend
+- WebSocket/STOMP para comunicação em tempo real
+- API de CEP para cálculo de frete e validação de endereço
+- Internationalization via `@ngx-translate` com fallback para `pt`
+
+## Funcionalidades implementadas
+
+- listagem de produtos por categorias femininas
+- busca de produtos por palavra-chave
+- exibição de destaques e coleções promocionais
+- carrinho de compras com ajuste de quantidade e remoção de itens
+- cálculo de frete via consulta de CEP
+- fluxo de checkout e emissão de recibo
+- suporte a PWA em build de produção
+- internacionalização com fallback para `pt`
+
+## Qualidades do projeto
+
+- modularidade para facilitar manutenção e evolução
+- arquitetura baseada em componentes com rotas standalone
+- uso de serviços para desacoplamento e convenções de domínio
+- suporte a multi-idioma e experiência mobile-first
+- configuração de produção com budgets e service worker
+
+## Scripts disponíveis
+
+- `npm start` — executa o servidor de desenvolvimento
+- `npm run build` — compila o aplicativo para produção
+- `npm run watch` — recompila em modo watch para desenvolvimento
+- `npm test` — executa testes unitários com Karma
+
+## Setup local
+
+### Requisitos
+
+- Node.js 18+ ou superior
+- npm 10+ ou yarn
+
+### Instalar dependências
 
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Executar em desenvolvimento
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Acesse `http://localhost:4200/`. O servidor recarrega automaticamente quando os arquivos mudam.
+
+### Build de produção
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+O resultado será gerado em `dist/oficina_mecanica/`.
 
-To build the project run:
+## Testes
+
+### Testes unitários
 
 ```bash
-ng build
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+O projeto utiliza Karma e Jasmine para validação de componentes e serviços.
 
-## Running unit tests
+## Configuração de ambiente
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Os arquivos de ambiente estão localizados em:
 
-```bash
-ng test
-```
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
 
-## Running end-to-end tests
+Adapte chaves de API, endpoints de backend e configurações de produção conforme necessário.
 
-For end-to-end (e2e) testing, run:
+## Implantação
 
-```bash
-ng e2e
-```
+Para deploy, publique o conteúdo de `dist/oficina_mecanica/` em um servidor estático ou CDN.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Pontos de atenção:
+- o service worker é ativado apenas no build de produção
+- o manifesto PWA está em `src/manifest.webmanifest`
+- assets estáticos são servidos a partir de `src/assets`
 
-## Additional Resources
+## Boas práticas para manutenção
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- mantenha a separação entre lógica de apresentação e serviços de dados
+- centralize chamadas HTTP em `src/app/services`
+- utilize os modelos em `src/app/model` para consistência de dados
+- mantenha traduções sincronizadas em `src/assets/i18n`
+- monitore os budgets de build em `angular.json` para evitar assets muito grandes
+
+## Próximos passos recomendados
+
+- adicionar testes E2E para jornadas de compra completas
+- separar configurações sensíveis em variáveis de ambiente
+- implementar autenticação de usuário e gerenciamento de sessão
+- aprimorar tratamentos de erro e feedback de carregamento
+- documentar os contratos de API e os endpoints externos
+
+---
+
+Desenvolvido com foco em qualidade, modularidade e facilidade de manutenção para um e-commerce de moda feminina.

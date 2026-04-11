@@ -1,0 +1,565 @@
+/* navbar.component.scss */
+
+/* ─────────────────────────────────────────
+   Tokens — mesmos do design system da loja
+   ───────────────────────────────────────── */
+:host {
+  --cor-terracota: #8B5E52;
+  --cor-terracota-claro: #C9A99A;
+  --cor-terracota-suave: #F5EDE9;
+  --cor-terracota-hover: #7A5248;
+
+  --fonte-display: 'Cormorant Garamond', Georgia, serif;
+  --fonte-corpo: 'Jost', sans-serif;
+
+  --raio-badge: 2px;
+  --raio-botao: 2px;
+  --transicao: 0.2s ease;
+
+  --navbar-altura: 64px;
+}
+
+/* ─────────────────────────────────────────
+   Wrapper
+   ───────────────────────────────────────── */
+.navbar-wrapper {
+  font-family: var(--fonte-corpo);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 0.5px solid #E5DDD8;
+}
+
+/* ─────────────────────────────────────────
+   Navbar principal
+   ───────────────────────────────────────── */
+.navbar-principal {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: var(--navbar-altura);
+}
+
+/* ─────────────────────────────────────────
+   Logo
+   ───────────────────────────────────────── */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+
+  img {
+    height: 145px;
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Menu (links centrais)
+   ───────────────────────────────────────── */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+/* ─────────────────────────────────────────
+   Link base da nav
+   ───────────────────────────────────────── */
+.nav-link {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #7A6F6A;
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: color var(--transicao);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--cor-terracota);
+  }
+}
+
+/* ─────────────────────────────────────────
+   Dropdown de categorias
+   ───────────────────────────────────────── */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-link--dropdown {
+  font-family: var(--fonte-corpo);
+}
+
+.dropdown-seta {
+  display: flex;
+  align-items: center;
+  transition: transform var(--transicao);
+  color: #B0A098;
+
+  &.dropdown-seta--ativa {
+    transform: rotate(180deg);
+    color: var(--cor-terracota);
+  }
+}
+
+.dropdown-lista {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 0.5px solid #E5DDD8;
+  border-radius: var(--raio-botao);
+  padding: 6px 0;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity var(--transicao), transform var(--transicao);
+  z-index: 200;
+
+  .nav-dropdown--aberto & {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  padding: 9px 18px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #7A6F6A;
+  text-decoration: none;
+  transition: background var(--transicao), color var(--transicao);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--cor-terracota-suave);
+    color: var(--cor-terracota);
+  }
+
+  &.dropdown-item--loading {
+    color: #B0A098;
+    font-style: italic;
+    cursor: default;
+    pointer-events: none;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+}
+
+/* ─────────────────────────────────────────
+   Ações à direita
+   ───────────────────────────────────────── */
+.navbar-acoes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────
+   Busca expansível
+   ───────────────────────────────────────── */
+.busca-wrapper {
+  display: flex;
+  align-items: center;
+  border: 0.5px solid transparent;
+  border-radius: var(--raio-botao);
+  transition: border-color var(--transicao), background var(--transicao);
+  overflow: hidden;
+
+  &.busca-wrapper--ativa {
+    border-color: #E5DDD8;
+    background: #FAF7F5;
+  }
+}
+
+.busca-input {
+  width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--fonte-corpo);
+  font-size: 12px;
+  font-weight: 300;
+  color: #2C2520;
+  outline: none;
+  transition: width 0.25s ease, padding 0.25s ease;
+
+  &::placeholder {
+    color: #B0A098;
+  }
+
+  &.busca-input--visivel {
+    width: 180px;
+    padding: 0 10px;
+  }
+}
+
+.btn-busca {
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7A6F6A;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: var(--raio-botao);
+  transition: color var(--transicao), background var(--transicao);
+
+  &:hover {
+    color: var(--cor-terracota);
+    background: var(--cor-terracota-suave);
+  }
+}
+
+/* ─────────────────────────────────────────
+   Carrinho
+   ───────────────────────────────────────── */
+.btn-carrinho {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7A6F6A;
+  text-decoration: none;
+  border-radius: var(--raio-botao);
+  transition: color var(--transicao), background var(--transicao);
+
+  &:hover {
+    color: var(--cor-terracota);
+    background: var(--cor-terracota-suave);
+  }
+}
+
+.carrinho-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: var(--cor-terracota);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ─────────────────────────────────────────
+   Hamburguer (mobile)
+   ───────────────────────────────────────── */
+.btn-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: var(--raio-botao);
+  transition: background var(--transicao);
+
+  &:hover {
+    background: var(--cor-terracota-suave);
+  }
+}
+
+.hamburger-linha {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #7A6F6A;
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  &:nth-child(1).hamburger-linha--ativa {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  &:nth-child(2).hamburger-linha--ativa {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  &:nth-child(3).hamburger-linha--ativa {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+}
+
+/* ─────────────────────────────────────────
+   Overlay mobile
+   ───────────────────────────────────────── */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 37, 32, 0.25);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity var(--transicao);
+  pointer-events: none;
+
+  &.menu-overlay--visivel {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Seletor de idioma
+   ───────────────────────────────────────── */
+.seletor-idioma {
+  display: flex;
+  gap: .5rem;
+}
+
+.idioma-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 0.5px solid #C9A99A;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  color: #8B5E52;
+  transition: all .15s;
+
+  &--ativo {
+    background: #8B5E52;
+    color: #fff;
+    border-color: #8B5E52;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Busca mobile overlay (elemento externo
+   à navbar, desliza abaixo dela)
+   ───────────────────────────────────────── */
+.busca-mobile-overlay {
+  display: none;
+}
+
+/* ─────────────────────────────────────────
+   Responsivo — tablet (768px)
+   ───────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  .btn-hamburger {
+    display: flex;
+  }
+
+  .menu-overlay {
+    display: block;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: #fff;
+    border-right: 0.5px solid #E5DDD8;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: calc(var(--navbar-altura) + 1rem) 1rem 2rem;
+    gap: 0;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+
+    &.navbar-menu--aberto {
+      transform: translateX(0);
+    }
+  }
+
+  .nav-dropdown {
+    width: 100%;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 12px 8px;
+    font-size: 10px;
+  }
+
+  .dropdown-lista {
+    position: static;
+    border: none;
+    border-top: 0.5px solid #E5DDD8;
+    padding: 4px 0 4px 12px;
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
+    box-shadow: none;
+    display: none;
+
+    .nav-dropdown--aberto & {
+      display: block;
+    }
+  }
+
+  .navbar-principal {
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .navbar-acoes {
+    gap: 2px;
+  }
+
+  .idioma-btn {
+    font-size: 0;
+    padding: 4px;
+
+    &::first-letter {
+      font-size: 14px;
+    }
+  }
+
+  .btn-busca,
+  .btn-carrinho,
+  .btn-hamburger {
+    width: 34px;
+    height: 34px;
+  }
+
+  .navbar-wrapper {
+    overflow-x: hidden;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Responsivo — mobile (480px)
+   ───────────────────────────────────────── */
+@media (max-width: 480px) {
+
+  .seletor-idioma {
+    display: flex;
+    gap: 2px;
+  }
+
+  .idioma-btn {
+    font-size: 0;
+    padding: 4px;
+    min-width: 28px;
+
+    &::first-letter {
+      font-size: 14px;
+    }
+  }
+
+  /* Busca — input dentro da navbar some completamente,
+     a lupa permanece estática no lugar */
+  .busca-input {
+    display: none;
+  }
+
+  .busca-wrapper {
+    position: relative; /* nunca sai do fluxo */
+    border: none;
+    background: transparent;
+  }
+
+  .busca-wrapper.busca-wrapper--ativa {
+    border: none;
+    background: transparent;
+    /* O overlay externo (.busca-mobile-overlay) assume o papel de exibir a busca */
+  }
+
+  /* Overlay de busca desliza abaixo da navbar */
+
+  .busca-mobile-overlay {
+    display: block;
+    position: fixed;
+    top: var(--navbar-altura);  /* empurra para baixo da navbar */
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 0.5px solid #E5DDD8;
+    padding: 8px;
+    z-index: 98;  /* ← abaixo da navbar (z-index: 100) */
+    transform: translateY(-110%);
+    transition: transform 0.2s ease;
+    pointer-events: none;
+
+    &.busca-mobile-overlay--ativa {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+
+  .busca-input-mobile {
+    width: 100%;
+    padding: 10px;
+    border: 0.5px solid #E5DDD8;
+    border-radius: var(--raio-botao);
+    background: #FAF7F5;
+    font-family: var(--fonte-corpo);
+    font-size: 12px;
+    color: #2C2520;
+    outline: none;
+
+    &::placeholder {
+      color: #B0A098;
+    }
+  }
+
+  .navbar-acoes {
+    gap: 2px;
+  }
+
+  .btn-busca,
+  .btn-carrinho,
+  .btn-hamburger {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar-logo img {
+    height: 105px;
+  }
+
+  .navbar-principal {
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+  }
+}

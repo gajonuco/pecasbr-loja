@@ -1,51 +1,119 @@
-<div class="container-fluid">
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        <img src="assets/img/logo_autopecas.png" alt="Logo">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<!-- navbar.component.html -->
+<!-- Barra de busca flutuante (mobile) -->
+<div class="busca-mobile-overlay" [class.busca-mobile-overlay--ativa]="buscaAberta">
+  <input class="busca-input-mobile" type="search"
+    [placeholder]="'navbar.busca_placeholder' | translate"
+    [(ngModel)]="keyword"
+    (keyup.enter)="buscar()"
+    [attr.autofocus]="buscaAberta ? true : null" />
+</div>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                CATEGORÍAS
-            </a>
-            <ul class="dropdown-menu">
-              @if (lista && lista.length > 0) {
-              @for (CAT_PECA of lista; track CAT_PECA.id){
-              <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]">{{ CAT_PECA.nome }}</a>
-              }
-              } @else {
-              <li class="dropdown-item disabled">Carregando categorias...</li>
-              }
-              <!--
-            <li><a class="dropdown-item" href="#">Categoria 1</a></li>
-            <li><a class="dropdown-item" href="#">Categoria 2</a></li>
-            <li><a class="dropdown-item" href="#">Categoria 3</a></li> -->
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="btn" [routerLink]="'carrinho'">
-              <i class="fa-solid fa-cart-shopping fa-2x" aria-hidden="true"></i>
 
-              @if (numItens > 0) {
-              <span class="badge text-bg-danger">{{ numItens }}</span>
-              }
-            </a>
-          </li>
+<header class="navbar-wrapper">
+  <nav class="navbar-principal">
 
+    <!-- Logo -->
+    <a class="navbar-logo" routerLink="/" [attr.aria-label]="'navbar.pagina_inicial' | translate">
+      <img src="assets/img/ecommerce_woman.png" alt="Logo">
+    </a>
+
+    <!-- Menu desktop -->
+    <div class="navbar-menu" [class.navbar-menu--aberto]="menuAberto">
+
+      <!-- Categorias dropdown -->
+      <div class="nav-dropdown" [class.nav-dropdown--aberto]="dropdownAberto">
+        <button class="nav-link nav-link--dropdown"
+          (click)="dropdownAberto = !dropdownAberto"
+          (blur)="fecharDropdown()"
+          (touchstart)="dropdownAberto = !dropdownAberto"
+          aria-haspopup="true"
+          [attr.aria-expanded]="dropdownAberto">
+          {{ 'navbar.categorias' | translate }}
+          <span class="dropdown-seta" [class.dropdown-seta--ativa]="dropdownAberto">
+            <svg width="10" height="10" viewBox="0 0 10 6" fill="none">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>
+          </span>
+        </button>
+
+        <ul class="dropdown-lista" role="menu">
+          @if (lista && lista.length > 0) {
+            @for (CAT_PECA of lista; track CAT_PECA.id) {
+              <li role="none">
+                <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]"
+                  role="menuitem" (click)="fecharMenu()">
+                  {{ CAT_PECA.nome }}
+                </a>
+              </li>
+            }
+          } @else {
+            <li class="dropdown-item dropdown-item--loading">{{ 'navbar.carregando_categorias' | translate }}</li>
+          }
         </ul>
-        <div class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Procure sua peça" aria-label="Search"
-            [(ngModel)]="keyword" />
-          <button class="btn" (click)="buscar()"><i class="fa fa-search fa-2x" aria-hidden="true"></i></button>
-        </div>
       </div>
+
+    </div>
+
+    <!-- Ações à direita -->
+    <div class="navbar-acoes">
+
+      <div class="seletor-idioma">
+        @for (idioma of idiomaService.idiomas; track idioma.codigo) {
+          <button
+            class="idioma-btn"
+            [class.idioma-btn--ativo]="idiomaService.idiomaAtual === idioma.codigo"
+            (click)="idiomaService.trocar(idioma.codigo)">
+            {{ idioma.bandeira }} {{ idioma.label }}
+          </button>
+        }
+      </div>
+
+      <!-- Busca -->
+      <div class="busca-wrapper" [class.busca-wrapper--ativa]="buscaAberta">
+        <input class="busca-input" type="search"
+          [placeholder]="'navbar.busca_placeholder' | translate"
+          [attr.aria-label]="'navbar.buscar' | translate"
+          [(ngModel)]="keyword"
+          (keyup.enter)="buscar()"
+          [class.busca-input--visivel]="buscaAberta" />
+        <button class="btn-busca" (click)="toggleBusca()"
+          [attr.aria-label]="'navbar.buscar' | translate">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Carrinho -->
+      <a class="btn-carrinho" [routerLink]="'carrinho'"
+        [attr.aria-label]="'navbar.carrinho' | translate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.5" stroke-linecap="round">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+        @if (numItens > 0) {
+          <span class="carrinho-badge">{{ numItens }}</span>
+        }
+      </a>
+
+      <!-- Hamburguer mobile -->
+      <button class="btn-hamburger" (click)="menuAberto = !menuAberto"
+        [attr.aria-expanded]="menuAberto"
+        [attr.aria-label]="'navbar.menu' | translate">
+        <span class="hamburger-linha" [class.hamburger-linha--ativa]="menuAberto"></span>
+        <span class="hamburger-linha" [class.hamburger-linha--ativa]="menuAberto"></span>
+        <span class="hamburger-linha" [class.hamburger-linha--ativa]="menuAberto"></span>
+      </button>
+
     </div>
   </nav>
-</div>
+
+  <!-- Overlay mobile -->
+  <div class="menu-overlay" [class.menu-overlay--visivel]="menuAberto"
+    (click)="menuAberto = false" (touchstart)="menuAberto = false">
+  </div>
+</header>

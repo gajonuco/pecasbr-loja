@@ -1,58 +1,208 @@
-<div class="container">
-    <div class="row">
-        @if (pecaDetalhe) {
-        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-            <img src="{{ pecaDetalhe.linkFoto}}" width="100%">
+<!-- detalhe.component.html -->
+
+<section class="detalhe-page">
+  @if (pecaDetalhe) {
+  <div class="detalhe-container">
+
+    <!-- ══ COLUNA ESQUERDA: Galeria ══ -->
+    <div class="galeria-col">
+
+      <!-- Miniaturas verticais -->
+      @if (totalImagens > 1) {
+      <div class="miniaturas">
+        @for (img of pecaDetalhe.imagens; track img.id; let i = $index) {
+        <button class="miniatura-btn" [class.miniatura-btn--ativa]="i === indexAtivo"
+          (click)="selecionarImagem(img, i)"
+          [attr.aria-label]="('detalhe.imagem' | translate) + ' ' + (i + 1)">
+          <img [src]="img.linkImagem" [alt]="pecaDetalhe.nome">
+        </button>
+        }
+      </div>
+      }
+
+      <!-- Imagem Principal com Zoom -->
+      <div class="imagem-principal-wrapper">
+
+        @if (totalImagens > 1) {
+        <button class="nav-seta nav-seta--prev" (click)="imagemAnterior()"
+          [attr.aria-label]="'detalhe.anterior' | translate">‹</button>
+        <button class="nav-seta nav-seta--next" (click)="proximaImagem()"
+          [attr.aria-label]="'detalhe.proxima' | translate">›</button>
+        }
+
+        <div class="zoom-container" [class.zoom-container--ativo]="zoomAtivo"
+          (mouseenter)="zoomAtivo = true"
+          (mouseleave)="zoomAtivo = false"
+          (mousemove)="onMouseMove($event)">
+          <img [src]="imagemAtiva" [alt]="pecaDetalhe.nome" class="imagem-principal"
+            [style.transform-origin]="zoomX + '% ' + zoomY + '%'"
+            [class.imagem-principal--zoom]="zoomAtivo">
         </div>
-        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
-            <h4>{{pecaDetalhe.nome}}</h4>
-            <div [innerHTML]="pecaDetalhe.detalhe"></div>
-            
-            <br />
-            
-            <!-- Exibição de Preço -->
-            @if (pecaDetalhe.precoPromo === 0) {
-            <h4>Por: {{ pecaDetalhe.preco | currency:'BRL':'symbol':'1.2-2' }}</h4>
-            } @else if(pecaDetalhe.preco !== pecaDetalhe.precoPromo ) {
-            <h4>De: <del>{{ pecaDetalhe.preco | currency:'BRL':'symbol':'1.2-2' }}</del></h4>
-            <h2>Por: {{ pecaDetalhe.precoPromo | currency:'BRL':'symbol':'1.2-2' }}</h2>
-            }
-            
-            <!-- Exibição de Estoque Disponível -->
-            <div class="alert alert-info mt-3">
-                <strong>Estoque disponível:</strong> {{ pecaDetalhe.quantidadeEstoque }} unidade(s)
-            </div>
-            
-            <!-- Input de Quantidade com Validação -->
-            <label for="quantidade" class="form-label">Quantidade:</label>
-            <input 
-                type="number" 
-                id="quantidade"
-                [(ngModel)]="quantidade" 
-                (ngModelChange)="validarQuantidade()"
-                class="form-control" 
-                [class.is-invalid]="quantidadeInvalida"
-                placeholder="1" 
-                value="1" 
-                [max]="pecaDetalhe.quantidadeEstoque"
-                min="1">
-            
-            <!-- Mensagem de Erro -->
-            @if (quantidadeInvalida) {
-            <div class="alert alert-danger mt-2">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ mensagemEstoque }}
-            </div>
-            }
-            
-            <br>
-            <button 
-                type="button" 
-                (click)="adicionarCarrinho()" 
-                class="btn btn-primary mb-3"
-                [disabled]="quantidadeInvalida || quantidade < 1">
-                Adicionar ao carrinho
-            </button>
+
+        @if (totalImagens > 1) {
+        <div class="indicadores">
+          @for (img of pecaDetalhe.imagens; track img.id; let i = $index) {
+          <span class="indicador" [class.indicador--ativo]="i === indexAtivo"></span>
+          }
         </div>
         }
+
+      </div>
     </div>
-</div>
+
+    <!-- ══ COLUNA DIREITA: Informações ══ -->
+    <div class="info-col">
+
+      <!-- Categoria + Nome -->
+      <div class="produto-header">
+        <span class="produto-categoria">{{ pecaDetalhe.categoriaPeca?.nome }}</span>
+        <h1 class="produto-nome">{{ pecaDetalhe.nome }}</h1>
+      </div>
+
+      <!-- Preço -->
+      <div class="preco-bloco">
+        @if (pecaDetalhe.precoPromo > 0 && pecaDetalhe.preco !== pecaDetalhe.precoPromo) {
+        <span class="preco-de">
+          {{ 'detalhe.de' | translate }}: <del>{{ pecaDetalhe.preco | currency:'BRL':'symbol':'1.2-2' }}</del>
+        </span>
+        <div class="preco-por">
+          {{ pecaDetalhe.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
+        </div>
+        <span class="desconto-badge">
+          {{ ((1 - pecaDetalhe.precoPromo / pecaDetalhe.preco) * 100) | number:'1.0-0' }}% off
+        </span>
+        } @else {
+        <div class="preco-por">
+          {{ pecaDetalhe.preco | currency:'BRL':'symbol':'1.2-2' }}
+        </div>
+        }
+      </div>
+
+      <!-- Status de Estoque -->
+      <div class="estoque-bloco">
+        @switch (statusEstoque) {
+        @case ('disponivel') {
+        <span class="estoque-tag estoque-tag--ok">
+          <span class="estoque-dot"></span>
+          {{ 'detalhe.em_estoque' | translate }} · {{ pecaDetalhe.quantidadeEstoque }} {{ 'detalhe.unidades' | translate }}
+        </span>
+        }
+        @case ('baixo') {
+        <span class="estoque-tag estoque-tag--baixo">
+          <span class="estoque-dot"></span>
+          {{ 'detalhe.ultimas' | translate }} {{ pecaDetalhe.quantidadeEstoque }} {{ 'detalhe.unidades' | translate }}
+        </span>
+        }
+        @case ('esgotado') {
+        <span class="estoque-tag estoque-tag--esgotado">
+          <span class="estoque-dot"></span>
+          {{ 'detalhe.esgotado' | translate }}
+        </span>
+        }
+        }
+      </div>
+
+      <!-- Descrição -->
+      <div class="descricao" [innerHTML]="pecaDetalhe.detalhe"></div>
+
+      <!-- Seletor de Cor -->
+      @if (coresDisponiveis.length > 0 && !pecaDetalhe.corUnica) {
+      <div class="variacao-bloco">
+        <span class="variacao-label">
+          {{ 'detalhe.cor' | translate }}
+          @if (corSelecionada) { <strong>— {{ corSelecionada }}</strong> }
+        </span>
+        <div class="cor-swatches">
+          @for (cor of coresDisponiveis; track cor.nome) {
+          <button class="swatch" [class.swatch--ativo]="corSelecionada === cor.nome"
+            [style.background]="cor.hex" [title]="cor.nome"
+            (click)="corSelecionada = cor.nome; onCorOuTamanhoChange()"
+            [attr.aria-label]="cor.nome">
+          </button>
+          }
+        </div>
+      </div>
+      }
+
+      @if (pecaDetalhe.corUnica) {
+      <div class="variacao-bloco">
+        <span class="variacao-label">
+          {{ 'detalhe.cor' | translate }} — <strong>{{ 'detalhe.cor_unica' | translate }}</strong>
+        </span>
+      </div>
+      }
+
+      <!-- Seletor de Tamanho -->
+      @if (tamanhosDisponiveis.length > 0 && !pecaDetalhe.tamanhoUnico) {
+      <div class="variacao-bloco">
+        <span class="variacao-label">
+          {{ 'detalhe.tamanho' | translate }}
+          @if (tamanhoSelecionado) { <strong>— {{ tamanhoSelecionado }}</strong> }
+        </span>
+        <div class="tamanho-chips">
+          @for (tam of tamanhosDisponiveis; track tam) {
+          <button class="tam-chip" [class.tam-chip--ativo]="tamanhoSelecionado === tam"
+            [class.tam-chip--indisponivel]="!tamanhoDisponivelParaCor(tam)"
+            [disabled]="!tamanhoDisponivelParaCor(tam)"
+            (click)="tamanhoSelecionado = tam; onCorOuTamanhoChange()">
+            {{ tam }}
+          </button>
+          }
+        </div>
+      </div>
+      }
+
+      @if (pecaDetalhe.tamanhoUnico) {
+      <div class="variacao-bloco">
+        <span class="variacao-label">
+          {{ 'detalhe.tamanho' | translate }} — <strong>{{ 'detalhe.tamanho_unico' | translate }}</strong>
+        </span>
+      </div>
+      }
+
+      <!-- Erro de seleção -->
+      @if (erroSelecao) {
+      <small class="erro-selecao">{{ erroSelecao }}</small>
+      }
+
+      <hr class="separador">
+
+      <!-- Quantidade + Botão -->
+      @if (statusEstoque !== 'esgotado') {
+      <div class="compra-bloco">
+
+        <div class="quantidade-wrapper">
+          <label class="quantidade-label">{{ 'detalhe.quantidade' | translate }}</label>
+          <div class="quantidade-controle">
+            <button class="qtd-btn" (click)="quantidade = quantidade - 1; validarQuantidade()"
+              [disabled]="quantidade <= 1">−</button>
+            <input type="number" [(ngModel)]="quantidade" (ngModelChange)="validarQuantidade()"
+              class="qtd-input" [class.qtd-input--erro]="quantidadeInvalida"
+              min="1" [max]="pecaDetalhe.quantidadeEstoque">
+            <button class="qtd-btn" (click)="quantidade = quantidade + 1; validarQuantidade()"
+              [disabled]="quantidade >= pecaDetalhe.quantidadeEstoque">+</button>
+          </div>
+          @if (quantidadeInvalida) {
+          <small class="erro-qtd">{{ mensagemEstoque }}</small>
+          }
+        </div>
+
+        <button class="btn-carrinho" (click)="adicionarCarrinho()"
+          [disabled]="quantidadeInvalida || quantidade < 1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          {{ 'detalhe.adicionar_carrinho' | translate }}
+        </button>
+
+      </div>
+      } @else {
+      <p class="esgotado-aviso">{{ 'detalhe.indisponivel' | translate }}</p>
+      }
+
+    </div>
+  </div>
+  }
+</section>

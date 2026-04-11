@@ -1,26 +1,23 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { routes } from './app/app.routes';
-import { isDevMode, provideZoneChangeDetection } from '@angular/core';
+import { isDevMode }            from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
-import { LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
+import { LOCALE_ID }            from '@angular/core';
+import { registerLocaleData }   from '@angular/common';
+import localePt                 from '@angular/common/locales/pt';
+import { appConfig }            from './app/app.config';
 
-// registra o locale pt-BR
 registerLocaleData(localePt);
-
 
 bootstrapApplication(App, {
   providers: [
-    provideZoneChangeDetection(),{ provide: LOCALE_ID, useValue: 'pt-BR' },
-    provideHttpClient(),
-    provideRouter(routes),
+    ...appConfig.providers,              // ← expande todos os providers do appConfig
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
     })
   ]
 });
+
+document.addEventListener('touchstart', () => {}, { passive: true });

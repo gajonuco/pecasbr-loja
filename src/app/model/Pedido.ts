@@ -11,4 +11,5 @@ export class Pedido{
     public status!: number;
     public valorFrete!: number;
     public retirar!: number;
+    public linkPagamento!: string;
 }

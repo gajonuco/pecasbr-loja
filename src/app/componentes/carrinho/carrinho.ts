@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Pedido } from '../../model/Pedido';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { CarrinhoService } from '../../servicos/carrinho-service';
-import { PecaService } from '../../servicos/peca-service';
+import { CarrinhoService } from '../../services/carrinho-service';
+import { PecaService } from '../../services/peca-service';
+import { TranslateModule } from '@ngx-translate/core';
+
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-carrinho',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './carrinho.html',
-  styleUrl: './carrinho.css'
+  styleUrl: './carrinho.scss'
 })
 export class Carrinho implements OnInit {
 
@@ -18,6 +20,7 @@ export class Carrinho implements OnInit {
   public mensagemToast!: string;
   public toastType!: string;
   public vazio!: boolean;
+  public toastVisivel: boolean = false;
 
   constructor(private router: Router,
     private carService: CarrinhoService,
@@ -29,13 +32,12 @@ export class Carrinho implements OnInit {
     this.router.navigate([''])
   }
 
-  public mostrarToast() {
-    const toastEl = document.querySelector('#liveToast');
-    if (toastEl) {
-      const toast = new bootstrap.Toast(toastEl);
-      toast.show();
-    }
-  }
+mostrarToast(mensagem: string, tipo: string) {
+  this.mensagemToast = mensagem;
+  this.toastType = tipo;
+  this.toastVisivel = true;
+  setTimeout(() => this.toastVisivel = false, 3500);
+}
 
   ngOnInit(): void {
     const carrinhoString = localStorage.getItem("AdicionarCarrinho");
@@ -62,7 +64,7 @@ export class Carrinho implements OnInit {
       if (this.pedido.itensPedido[i].peca.id == idProduto) {
         this.mensagemToast = "Produto removido -> " + this.pedido.itensPedido[i].peca.nome
         this.toastType = 'warning'
-        this.mostrarToast()
+        this.mostrarToast(this.mensagemToast, this.toastType);
         this.pedido.valorTotal -= this.pedido.itensPedido[i].precoTotal
         this.pedido.itensPedido.splice(i, 1);
       }

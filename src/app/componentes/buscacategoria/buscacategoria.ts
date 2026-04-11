@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { Peca } from '../../model/Peca';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { PecaService } from '../../servicos/peca-service';
+import { PecaService } from '../../services/peca-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-buscacategoria',
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule,RouterModule, FormsModule, TranslateModule],
   templateUrl: './buscacategoria.html',
-  styleUrl: './buscacategoria.css'
+  styleUrl: './buscacategoria.scss'
 })
 export class Buscacategoria {
 

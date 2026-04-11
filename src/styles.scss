@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400;500&display=swap');
+
+/* Reset básico */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Base da aplicação */
+body {
+  margin: 0;
+  background: #FAF7F5;
+  font-family: 'Jost', sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  /* Remove delay de toque sem quebrar scroll */
+  touch-action: manipulation;
+}
+
+/* Área de toque aumentada (CORRIGIDO) */
+a,
+button,
+[role="button"] {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+
+    /* 🔥 CORREÇÃO CRÍTICA */
+    pointer-events: none;
+  }
+}
+
+/* Elementos clicáveis (Angular + geral) */
+[class*="btn"],
+[routerLink],
+[ng-reflect-router-link],
+a,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  user-select: none;
+}

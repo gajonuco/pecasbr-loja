@@ -1,78 +1,93 @@
-<!-- <app-carousel></app-carousel> -->
+<!-- destaques.component.html -->
 
-<div class="container my-4" id="destaques">
-  <div class="row g-3">
-    @for (ITEM of lista; track lista) {
-    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-      <div class="card h-100 shadow-sm">
-        <img src="{{ ITEM.linkFoto }}" class="card-img-top" alt="{{ ITEM.nome }}">
+<section class="vitrine-section" id="destaques">
 
-        <div class="badges-container">
+  <header class="vitrine-header">
+    <p class="label-colecao">{{ 'destaques.label_colecao' | translate }}</p>
+    <h2 class="titulo-secao">{{ 'destaques.titulo' | translate }}</h2>
+  </header>
+
+  <div class="grid-produtos">
+    @for (ITEM of lista; track ITEM.id) {
+
+    <article class="card-produto">
+
+      <!-- Imagem -->
+      <div class="img-wrapper">
+        <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
+
+        <!-- Badges de estoque -->
+        <div class="badges-wrap">
           @if (ITEM.prontaEntrega === 1) {
-          <span id="prontaEntrega" class="badge rounded-pill">
-            Pronta Entrega!
-          </span>
+            <span class="badge-pill badge-entrega">{{ 'badges.pronta_entrega' | translate }}</span>
           }
-
-          @if (ITEM.quantidadeEstoque <= ITEM.estoqueCritico) { <span id="estoqueCritico" class="badge rounded-pill">
-            Estoque Crítico!
-            </span>
-            } @else if (ITEM.quantidadeEstoque <= ITEM.estoqueMinimo) { <span id="estoqueBaixo"
-              class="badge rounded-pill">
-              Baixo Estoque!
-              </span>
-              }
+          @if (ITEM.quantidadeEstoque <= ITEM.estoqueCritico) {
+            <span class="badge-pill badge-critico">{{ 'badges.estoque_critico' | translate }}</span>
+          } @else if (ITEM.quantidadeEstoque <= ITEM.estoqueMinimo) {
+            <span class="badge-pill badge-baixo">{{ 'badges.baixo_estoque' | translate }}</span>
+          }
         </div>
 
-
-
-
-        <div class="card-body d-flex flex-column justify-content-between">
-          <div>
-            <h6 class="card-title text-center mb-1">{{ ITEM.nome }}</h6>
-            <h5 class="card-subtitle mb-2 text-center">
-              @if (ITEM.precoPromo === 0) {
-              Por: {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
-              } @else if(ITEM.preco !== ITEM.precoPromo ) {
-              De: <del>{{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}</del>
-              <br />
-              Por: {{ ITEM.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
-              }
-            </h5>
-
-            <p class="card-text small text-muted text-center mb-2">{{ ITEM.categoriaPeca.nome }}</p>
-          </div>
-
-
-          <a [routerLink]="['/detalhe/', ITEM.id]" class="btn btn-primary w-100 mt-auto">Eu quero!</a>
-        </div>
+        <!-- Overlay ao hover -->
+        <div class="img-overlay"></div>
       </div>
-    </div>
+
+      <!-- Corpo do card -->
+      <div class="card-corpo">
+
+        <span class="categoria-nome">{{ ITEM.categoriaPeca.nome }}</span>
+
+        <h3 class="produto-nome">{{ ITEM.nome }}</h3>
+
+        <div class="preco-wrap">
+          @if (ITEM.precoPromo === 0 || ITEM.preco === ITEM.precoPromo) {
+            <span class="preco-normal">
+              {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          } @else {
+            <span class="preco-de">
+              {{ ITEM.preco | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+            <span class="preco-por">
+              {{ ITEM.precoPromo | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          }
+        </div>
+
+        <a [routerLink]="['/detalhe/', ITEM.id]" class="btn-quero"
+          (touchstart)="onBtnQueroTouchStart($event, ITEM)"
+          (touchend)="onBtnQueroTouchEnd($event, ITEM)"
+          (click)="onBtnQueroClick($event, ITEM)">
+          {{ 'destaques.btn_quero' | translate }}
+        </a>
+
+      </div>
+    </article>
+
+    }
+  </div>
+
+  <!-- Paginação -->
+  <nav class="paginacao" [attr.aria-label]="'destaques.nav_aria' | translate">
+
+    @if (previousPage !== 0) {
+      <button class="btn-pag btn-pag-seta" (click)="recuperarProdutos(previousPage)"
+        [attr.aria-label]="'destaques.pagina_anterior' | translate">
+        <i class="fas fa-chevron-left"></i>
+      </button>
     }
 
-    <div class="row mt-5">
-      <div class="col-12 text-center">
-        <div class="btn-group" role="group" aria-label="Basic outlined example">
+    <span class="btn-pag btn-pag-numero ativo" aria-current="page">
+      {{ pageNumber }}
+    </span>
 
-          @if (previousPage !== 0) {
-          <button type="button" class="btn btn-outline-primary btn-natura" (click)="recuperarProdutos(previousPage)">
-            <i class="fas fa-backward"></i>
-          </button>
-          }
+    @if (nextPage !== 0) {
+      <button class="btn-pag btn-pag-seta" (click)="recuperarProdutos(nextPage)"
+        [attr.aria-label]="'destaques.proxima_pagina' | translate">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    }
 
-          <button type="button" class="btn btn-outline-primary btn-natura">
-            <b>{{ pageNumber }}</b>
-          </button>
+  </nav>
 
-          @if (nextPage !== 0) {
-          <button type="button" class="btn btn-outline-primary btn-natura" (click)="recuperarProdutos(nextPage)">
-            <i class="fas fa-forward"></i>
-          </button>
-          }
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
+</section>

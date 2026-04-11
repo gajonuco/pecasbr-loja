@@ -1,0 +1,168 @@
+/* rodape.component.scss */
+
+/* ─────────────────────────────────────────
+   Tokens — idênticos ao design system
+   ───────────────────────────────────────── */
+:host {
+  --cor-terracota:       #8B5E52;
+  --cor-terracota-claro: #C9A99A;
+  --cor-terracota-suave: #F5EDE9;
+
+  --fonte-display: 'Cormorant Garamond', Georgia, serif;
+  --fonte-corpo:   'Jost', sans-serif;
+
+  --transicao: 0.2s ease;
+}
+
+/* ─────────────────────────────────────────
+   Rodapé
+   ───────────────────────────────────────── */
+.rodape {
+  font-family: var(--fonte-corpo);
+  background: #2C2520;
+  border-top: 0.5px solid #3E3330;
+}
+
+/* ─────────────────────────────────────────
+   Grid interno
+   ───────────────────────────────────────── */
+.rodape-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 2.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2.5rem 1.5rem 2rem;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Coluna genérica
+   ───────────────────────────────────────── */
+.rodape-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ─────────────────────────────────────────
+   Coluna da marca
+   ───────────────────────────────────────── */
+.rodape-col--marca {
+  gap: 0.75rem;
+}
+
+.rodape-logo-link {
+  display: inline-block;
+  width: fit-content;
+}
+
+.rodape-logo {
+  height: 140px;
+  width: auto;
+  object-fit: contain;
+  /* Clareia levemente o logo para fundo escuro */
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+
+.rodape-slogan {
+  font-family: var(--fonte-display);
+  font-size: 14px;
+  font-weight: 300;
+  font-style: italic;
+  color: #C9A99A;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────
+   Título das colunas
+   ───────────────────────────────────────── */
+.rodape-col-titulo {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #C9A99A;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid #3E3330;
+}
+
+/* ─────────────────────────────────────────
+   Lista de itens
+   ───────────────────────────────────────── */
+.rodape-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─────────────────────────────────────────
+   Links e textos
+   ───────────────────────────────────────── */
+.rodape-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 300;
+  color: #A89990;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color var(--transicao);
+
+  &:hover {
+    color: #F5EDE9;
+  }
+}
+
+.rodape-texto {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 300;
+  color: #A89990;
+  letter-spacing: 0.02em;
+}
+
+/* ─────────────────────────────────────────
+   Ícones SVG
+   ───────────────────────────────────────── */
+.rodape-icone {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* ─────────────────────────────────────────
+   Linha inferior
+   ───────────────────────────────────────── */
+.rodape-bottom {
+  border-top: 0.5px solid #3E3330;
+  padding: 1rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.rodape-copy {
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: #5E4E49;
+  margin: 0;
+}

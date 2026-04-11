@@ -1,72 +1,131 @@
-@if(idPedido > 0){
-<div class= "container">
-    <div class = "row">
-        <div class ="col-12 text-center">
-             <h1>Recibo do seu pedido</h1>
-        </div>
+<!-- recibo.component.html -->
+
+@if (idPedido > 0 && detalhePedido) {
+<section class="recibo-page">
+
+  <!-- ── Cabeçalho ── -->
+  <header class="recibo-header">
+    <div class="recibo-header__left">
+      <p class="label-secao">{{ 'recibo.label_secao' | translate }}</p>
+      <h1 class="titulo-secao">{{ 'recibo.obrigada' | translate }} {{ detalhePedido.cliente.nome }}.</h1>
+      <p class="recibo-sub">{{ 'recibo.sub' | translate }}</p>
     </div>
-
-    <div class="row mt-10">
-        <div class="col-12 text-center">
-            <p>Obrigado {{detalhePedido.cliente.nome}}! Já estamos processando seu pedido!</p>
-            <p>Seu Whatsapp é {{ detalhePedido.cliente.telefone }} </p>
-        </div>
+    <div class="recibo-numero">
+      <span class="recibo-numero__label">{{ 'recibo.pedido' | translate }}</span>
+      <span class="recibo-numero__valor">#{{ idPedido }}</span>
     </div>
+  </header>
 
-    <div class="row mt-10">
-        <div class="col-12 text-center">
-            <h3>Pedido número {{ idPedido }}</h3>
-            <h4>Total a pagar R$ {{detalhePedido.valorTotal | number : '1.2-2'}}</h4>
-        </div>
+  <!-- ── Banner de status ── -->
+  <div class="status-banner">
+    <div class="status-banner__icone">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="2 8 6 12 14 4" />
+      </svg>
     </div>
+    <span class="status-banner__texto">{{ 'recibo.pagamento_confirmado_banner' | translate }}</span>
+  </div>
 
+  <div class="recibo-body">
 
-    <div class="row">
-        <div class="col-12 text-center">
-        <p><b>Sobre Seu Frete:</b></p>
-        @if (detalhePedido.retirar == 1) {
-        <p>
-            Você optou por retirar o pedido conosco. Entraremos em contato para combinarmos o endereço.
-            Nosso ponto de Retirada é no Jardim D'Abril em Osasco
-        </p>
-        }
-        @if (detalhePedido.retirar == 0 && detalhePedido.valorFrete != 0) {
-        <p>
-            Seu Frete estimado para a região é de R$ {{ detalhePedido.valorFrete }}
-            e já está incluso no valor total a ser pago
-        </p>
-        }
-        @if (detalhePedido.retirar == 0 && detalhePedido.valorFrete == 0) {
-        <p>
-            Ainda não temos um valor definido para seu frete. Nossos fretes iniciam em 4,99,
-            mas vamos fazer o cálculo de forma manual e entraremos em contato
-        </p>
-        }
-        <p><b>Sobre Pagamentos:</b></p>
-            <p>Em breve entraremos em contato para combinarmos a forma de pagamento e sanar eventuais dúvidas</p>
-            <p>Sigo à disposição pelas redes sociais e Whastapp (11) 96357-3218</p>
-            <p>Veja o resumo dos itens que você comprou</p>            
-        </div>
-    </div>
+    <!-- ── Coluna principal: itens ── -->
+    <div class="recibo-itens">
 
-        <table class="table">
-        <thead>
-            <tr>
-                <th>FOTO</th>
-                <th>Produto</th>
-                <th>Qtd</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for(ITEM of detalhePedido.itensPedido; track detalhePedido){
-                <tr>
-                <td><img src="{{ITEM.peca.linkFoto}}" width="50px"></td>
-                <td>{{ ITEM.peca.nome}}</td>
-                <td>{{ ITEM.qtdtItem}}</td>
+      <p class="secao-label">{{ 'recibo.itens_pedido' | translate }}</p>
 
-                </tr>
+      <div class="itens-lista">
+        @for (ITEM of detalhePedido.itensPedido; track ITEM.peca.id) {
+        <div class="item-row">
+
+          <div class="item-foto">
+            <img [src]="ITEM.peca.linkFoto" [alt]="ITEM.peca.nome">
+          </div>
+
+          <div class="item-info">
+            <span class="item-categoria">{{ ITEM.peca.categoriaPeca?.nome }}</span>
+            <span class="item-nome">{{ ITEM.peca.nome }}</span>
+
+            @if (ITEM.corEscolhida || ITEM.tamanhoEscolhido) {
+            <div class="item-variacao">
+              @if (ITEM.corEscolhida) {
+
+              <span class="variacao-chip">
+                <span class="variacao-swatch" [style.background]="ITEM.variacao?.hexCode ?? '#ccc'">
+                </span>
+                {{ ITEM.corEscolhida }}
+              </span>
+              }
+              @if (ITEM.tamanhoEscolhido) {
+              <span class="variacao-chip">{{ ITEM.tamanhoEscolhido }}</span>
+              }
+            </div>
             }
-        </tbody>
-    </table>
-</div>
+          </div>
+
+          <div class="item-qtd">
+            <span class="item-qtd__label">{{ 'recibo.qtd' | translate }}</span>
+            <span class="item-qtd__valor">{{ ITEM.qtdtItem }}</span>
+          </div>
+
+          <div class="item-preco">
+            <span class="item-preco__label">{{ 'recibo.subtotal' | translate }}</span>
+            <span class="item-preco__valor">
+              {{ toNumber(ITEM.precoTotal) | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          </div>
+
+        </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- ── Coluna lateral: resumo ── -->
+    <aside class="recibo-resumo">
+
+      <div class="resumo-card">
+        <p class="secao-label">{{ 'recibo.entrega' | translate }}</p>
+        @if (detalhePedido.retirar == 1) {
+        <p class="resumo-card__valor">{{ 'recibo.retirada_local' | translate }}</p>
+        <p class="resumo-card__detalhe">{{ 'recibo.retirada_detalhe' | translate }}</p>
+        } @else {
+        <p class="resumo-card__valor">{{ 'recibo.entrega_correios' | translate }}</p>
+        <p class="resumo-card__detalhe">
+          {{ 'recibo.frete' | translate }}: {{ toNumber(detalhePedido.valorFrete) | currency:'BRL':'symbol':'1.2-2' }} —
+          {{ 'recibo.frete_incluido' | translate }}
+        </p>
+        }
+      </div>
+
+      <div class="resumo-card">
+        <p class="secao-label">{{ 'recibo.fale_conosco' | translate }}</p>
+        <p class="resumo-card__valor">{{ detalhePedido.cliente.telefone }}</p>
+        <p class="resumo-card__detalhe">{{ 'recibo.fale_detalhe' | translate }}</p>
+      </div>
+
+      <div class="resumo-card resumo-card--total">
+        <p class="secao-label">{{ 'recibo.total_pago' | translate }}</p>
+        <p class="resumo-card__total">
+          {{ toNumber(detalhePedido.valorTotal) | currency:'BRL':'symbol':'1.2-2' }}
+        </p>
+        <p class="resumo-card__confirmado">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1.5 6 4.5 9 10.5 3" />
+          </svg>
+          {{ 'recibo.pagamento_confirmado' | translate }}
+        </p>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ── Rodapé ── -->
+  <footer class="recibo-footer">
+    <p>{{ 'recibo.agradecimento' | translate }}</p>
+  </footer>
+
+</section>
 }
