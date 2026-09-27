@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class PedidoService {
-  
+
   constructor(private http: HttpClient){}
 
   public inserirNovoPedido(novoPedido: Pedido): Observable<Pedido>{
@@ -18,4 +18,7 @@ export class PedidoService {
   public recuperarPedidoPeloId(idPedido: number): Observable<Pedido>{
     return this.http.get<Pedido>(environment.apiURL+"/pedido/search/"+ idPedido );
   }
+  public meusPedidos(): Observable<Pedido[]> {
+  return this.http.get<Pedido[]>(environment.apiURL + '/pedido/meus');
+}
 }
