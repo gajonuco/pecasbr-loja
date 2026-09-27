@@ -1,0 +1,20 @@
+<div class="pagina-conta">
+  <h1>Entrar</h1>
+  <form (ngSubmit)="entrar()">
+    <label>
+      E-mail
+      <input type="email" name="email" [(ngModel)]="email" required>
+    </label>
+    <label>
+      Senha
+      <input type="password" name="senha" [(ngModel)]="senha" required>
+    </label>
+    @if (erro){
+      <p class="erro">{{erro}}</p>
+    }
+    <button type="submit" [disabled]="carregando">
+      {{ carregando ? 'Entrando...' : 'Entrar'}}
+    </button>
+  </form>
+  <p>Ainda não tem conta?<a routerLink="/cadastro">Cadastre-se</a></p>
+</div>
