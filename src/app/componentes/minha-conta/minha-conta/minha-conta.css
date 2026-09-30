@@ -1,0 +1,440 @@
+
+/* =========================================================
+   CONTAINER PRINCIPAL
+   ========================================================= */
+
+.pagina-conta {
+  width: 100%;
+  max-width: 850px;
+  margin: 48px auto;
+  padding: 32px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.pagina-conta h1 {
+  margin: 0 0 28px;
+  color: #1f2937;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ABAS
+   ========================================================= */
+
+.abas-conta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 28px;
+  padding: 4px;
+
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.abas-conta button {
+  flex: 1;
+
+  min-height: 42px;
+  padding: 8px 14px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #6b7280;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.abas-conta button:hover {
+  color: #1f2937;
+  background: #e5e7eb;
+}
+
+.abas-conta button.ativo {
+  background: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Botão Sair */
+
+.abas-conta button:last-child {
+  color: #dc2626;
+}
+
+.abas-conta button:last-child:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* =========================================================
+   FORMULÁRIOS
+   ========================================================= */
+
+.pagina-conta form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 16px;
+}
+
+.pagina-conta form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagina-conta form input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagina-conta form input:hover {
+  border-color: #9ca3af;
+}
+
+.pagina-conta form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   E-MAIL
+   ========================================================= */
+
+.pagina-conta form > p {
+  grid-column: 1 / -1;
+
+  margin: 0;
+  padding: 12px 14px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+
+  background: #f9fafb;
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   BOTÕES DOS FORMULÁRIOS
+   ========================================================= */
+
+.pagina-conta form > button {
+  width: fit-content;
+  min-width: 130px;
+  height: 42px;
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagina-conta form > button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+}
+
+
+/* =========================================================
+   LISTA DE ENDEREÇOS
+   ========================================================= */
+
+.lista-enderecos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin: 0 0 20px;
+  padding: 0;
+
+  list-style: none;
+}
+
+.lista-enderecos li {
+  padding: 18px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.lista-enderecos li:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.lista-enderecos strong {
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.lista-enderecos p {
+  margin: 8px 0 14px;
+
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* Botões dos endereços */
+
+.lista-enderecos button {
+  margin-right: 8px;
+  padding: 7px 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lista-enderecos button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* Remover */
+
+.lista-enderecos button:last-child {
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.lista-enderecos button:last-child:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+
+/* =========================================================
+   BOTÃO "ADICIONAR ENDEREÇO"
+   ========================================================= */
+
+.lista-enderecos + button {
+  min-height: 42px;
+  padding: 0 16px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.lista-enderecos + button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+}
+
+
+/* =========================================================
+   FORMULÁRIO DE NOVO ENDEREÇO
+   ========================================================= */
+
+.lista-enderecos ~ form {
+  margin-top: 20px;
+  padding: 20px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+
+  background: #f9fafb;
+}
+
+.lista-enderecos ~ form button {
+  margin-right: 8px;
+}
+
+/* Botão cancelar */
+
+.lista-enderecos ~ form button:last-child {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.lista-enderecos ~ form button:last-child:hover {
+  background: #f3f4f6;
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   LISTA DE PEDIDOS
+   ========================================================= */
+
+.lista-pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.lista-pedidos li {
+  display: flex;
+  align-items: center;
+
+  min-height: 54px;
+  padding: 0 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 14px;
+
+  box-sizing: border-box;
+}
+
+.lista-pedidos li:hover {
+  background: #f9fafb;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .pagina-conta {
+    margin: 32px 16px;
+    padding: 24px 20px;
+  }
+
+  .pagina-conta h1 {
+    font-size: 24px;
+    margin-bottom: 22px;
+  }
+
+  .abas-conta {
+    flex-wrap: wrap;
+  }
+
+  .abas-conta button {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .pagina-conta form {
+    grid-template-columns: 1fr;
+  }
+
+  .pagina-conta form > p {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagina-conta {
+    margin: 20px 10px;
+    padding: 20px 16px;
+    border-radius: 10px;
+  }
+
+  .abas-conta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .abas-conta button {
+    width: 100%;
+  }
+
+  .lista-enderecos li {
+    padding: 15px;
+  }
+
+  .lista-enderecos button {
+    margin-bottom: 6px;
+  }
+}

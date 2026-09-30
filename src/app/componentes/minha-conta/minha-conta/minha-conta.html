@@ -1,0 +1,64 @@
+<div class="pagina-conta">
+  <h1>Minha conta</h1>
+
+  <nav class="abas-conta">
+    <button (click)="trocarAba('dados')" [class.ativo]="aba === 'dados'">Meus dados</button>
+    <button (click)="trocarAba('enderecos')" [class.ativo]="aba === 'enderecos'">Endereços</button>
+    <button (click)="trocarAba('pedidos')" [class.ativo]="aba === 'pedidos'">Meus pedidos</button>
+    <button (click)="sair()">Sair</button>
+  </nav>
+
+  @if(aba === 'dados' && cliente){
+    <form (ngSubmit)="salvarDados()">
+      <label>Nome <input name="nome" [(ngModel)]="cliente.nome"></label>
+      <label>Telefone <input name="telefone" [(ngModel)]="cliente.telefone"></label>
+      <label>Data de nascimento <input type="date" name="dataNasc" [(ngModel)]="cliente.dataNasc"></label>
+      <p>E-mail: {{ cliente.email}}</p>
+      <button type="submit">Salvar</button>
+    </form>
+  }
+
+  @if (aba === 'enderecos'){
+    <ul class="lista-enderecos">
+      @for (end of enderecos; track end.id){
+        <li>
+          <strong>{{ end.apelido || 'Endereço'}}</strong>{{ end.principal ? '(principla)' : '' }}
+          <p>{{ end.logradouro}}, {{ end.numero}} - {{end.bairro}}, {{ end.cidade }}/{{ end.estado}}</p>
+          @if (!end.principal) {
+            <button (click)="tornarPrincipal(end.id)">Tornar principal</button>
+          }
+          <button (click)="removerEndereco(end.id)">Remover</button>
+        </li>
+      }
+    </ul>
+  }
+
+    @if (!mostrarFormEndereco) {
+      <button (click)="mostrarFormEndereco = true">Adicionar endereço</button>
+    } @else {
+      <form (ngSubmit)="salvarNovoEndereco()">
+        <label>Apelido <input name="apelido" [(ngModel)]="novoEndereco.apelido"></label>
+        <label>CEP <input name="cep" [(ngModel)]="novoEndereco.cep" required></label>
+        <label>Logradouro <input name="logradouro" [(ngModel)]="novoEndereco.logradouro"></label>
+        <label>Número <input name="numero" [(ngModel)]="novoEndereco.numero"></label>
+        <label>Complemento <input name="complemento" [(ngModel)]="novoEndereco.complemento"></label>
+        <label>Bairro <input name="bairro" [(ngModel)]="novoEndereco.bairro"></label>
+        <label>Cidade <input name="cidade" [(ngModel)]="novoEndereco.cidade"></label>
+        <label>Estado <input name="estado" [(ngModel)]="novoEndereco.estado" maxlength="2"></label>
+        <button type="submit">Salvar endereço</button>
+        <button type="button" (click)="mostrarFormEndereco = false">Cancelar</button>
+      </form>
+    }
+
+
+
+  @if (aba === 'pedidos') {
+    <ul class="lista-pedidos">
+      @for (p of pedidos; track p.id) {
+        <li>Pedido #{{ p.id }} - R$ {{ p.valorTotal}} - status {{ p.status }}</li>
+      } @empty {
+        <li>Você ainda não fez nenhum pedido.</li>
+      }
+    </ul>
+  }
+</div>
