@@ -1,11 +1,8 @@
 <!-- navbar.component.html -->
 <!-- Barra de busca flutuante (mobile) -->
 <div class="busca-mobile-overlay" [class.busca-mobile-overlay--ativa]="buscaAberta">
-  <input class="busca-input-mobile" type="search"
-    [placeholder]="'navbar.busca_placeholder' | translate"
-    [(ngModel)]="keyword"
-    (keyup.enter)="buscar()"
-    [attr.autofocus]="buscaAberta ? true : null" />
+  <input class="busca-input-mobile" type="search" [placeholder]="'navbar.busca_placeholder' | translate"
+    [(ngModel)]="keyword" (keyup.enter)="buscar()" [attr.autofocus]="buscaAberta ? true : null" />
 </div>
 
 
@@ -22,12 +19,8 @@
 
       <!-- Categorias dropdown -->
       <div class="nav-dropdown" [class.nav-dropdown--aberto]="dropdownAberto">
-        <button class="nav-link nav-link--dropdown"
-          (click)="dropdownAberto = !dropdownAberto"
-          (blur)="fecharDropdown()"
-          (touchstart)="dropdownAberto = !dropdownAberto"
-          aria-haspopup="true"
-          [attr.aria-expanded]="dropdownAberto">
+        <button class="nav-link nav-link--dropdown" (click)="dropdownAberto = !dropdownAberto" (blur)="fecharDropdown()"
+          (touchstart)="dropdownAberto = !dropdownAberto" aria-haspopup="true" [attr.aria-expanded]="dropdownAberto">
           {{ 'navbar.categorias' | translate }}
           <span class="dropdown-seta" [class.dropdown-seta--ativa]="dropdownAberto">
             <svg width="10" height="10" viewBox="0 0 10 6" fill="none">
@@ -38,16 +31,16 @@
 
         <ul class="dropdown-lista" role="menu">
           @if (lista && lista.length > 0) {
-            @for (CAT_PECA of lista; track CAT_PECA.id) {
-              <li role="none">
-                <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]"
-                  role="menuitem" (click)="fecharMenu()">
-                  {{ CAT_PECA.nome }}
-                </a>
-              </li>
-            }
+          @for (CAT_PECA of lista; track CAT_PECA.id) {
+          <li role="none">
+            <a class="dropdown-item" [routerLink]="['/buscacategoria/', CAT_PECA.id]" role="menuitem"
+              (click)="fecharMenu()">
+              {{ CAT_PECA.nome }}
+            </a>
+          </li>
+          }
           } @else {
-            <li class="dropdown-item dropdown-item--loading">{{ 'navbar.carregando_categorias' | translate }}</li>
+          <li class="dropdown-item dropdown-item--loading">{{ 'navbar.carregando_categorias' | translate }}</li>
           }
         </ul>
       </div>
@@ -59,50 +52,53 @@
 
       <div class="seletor-idioma">
         @for (idioma of idiomaService.idiomas; track idioma.codigo) {
-          <button
-            class="idioma-btn"
-            [class.idioma-btn--ativo]="idiomaService.idiomaAtual === idioma.codigo"
-            (click)="idiomaService.trocar(idioma.codigo)">
-            {{ idioma.bandeira }} {{ idioma.label }}
-          </button>
+        <button class="idioma-btn" [class.idioma-btn--ativo]="idiomaService.idiomaAtual === idioma.codigo"
+          (click)="idiomaService.trocar(idioma.codigo)">
+          {{ idioma.bandeira }} {{ idioma.label }}
+        </button>
         }
       </div>
 
       <!-- Busca -->
       <div class="busca-wrapper" [class.busca-wrapper--ativa]="buscaAberta">
-        <input class="busca-input" type="search"
-          [placeholder]="'navbar.busca_placeholder' | translate"
-          [attr.aria-label]="'navbar.buscar' | translate"
-          [(ngModel)]="keyword"
-          (keyup.enter)="buscar()"
+        <input class="busca-input" type="search" [placeholder]="'navbar.busca_placeholder' | translate"
+          [attr.aria-label]="'navbar.buscar' | translate" [(ngModel)]="keyword" (keyup.enter)="buscar()"
           [class.busca-input--visivel]="buscaAberta" />
-        <button class="btn-busca" (click)="toggleBusca()"
-          [attr.aria-label]="'navbar.buscar' | translate">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.5" stroke-linecap="round">
+        <button class="btn-busca" (click)="toggleBusca()" [attr.aria-label]="'navbar.buscar' | translate">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round">
             <circle cx="11" cy="11" r="7" />
             <path d="M21 21l-4.35-4.35" />
           </svg>
         </button>
       </div>
 
+      <a class="btn-conta" [routerLink]="authService.estaLogado() ? '/minha-conta' : '/login'"
+        [attr.aria-label]="'Minha conta'">
+
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+
+        </svg>
+      </a>
+
       <!-- Carrinho -->
-      <a class="btn-carrinho" [routerLink]="'carrinho'"
-        [attr.aria-label]="'navbar.carrinho' | translate">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.5" stroke-linecap="round">
+      <a class="btn-carrinho" [routerLink]="'carrinho'" [attr.aria-label]="'navbar.carrinho' | translate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round">
           <circle cx="9" cy="21" r="1" />
           <circle cx="20" cy="21" r="1" />
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
         </svg>
         @if (numItens > 0) {
-          <span class="carrinho-badge">{{ numItens }}</span>
+        <span class="carrinho-badge">{{ numItens }}</span>
         }
       </a>
 
       <!-- Hamburguer mobile -->
-      <button class="btn-hamburger" (click)="menuAberto = !menuAberto"
-        [attr.aria-expanded]="menuAberto"
+      <button class="btn-hamburger" (click)="menuAberto = !menuAberto" [attr.aria-expanded]="menuAberto"
         [attr.aria-label]="'navbar.menu' | translate">
         <span class="hamburger-linha" [class.hamburger-linha--ativa]="menuAberto"></span>
         <span class="hamburger-linha" [class.hamburger-linha--ativa]="menuAberto"></span>
@@ -113,7 +109,7 @@
   </nav>
 
   <!-- Overlay mobile -->
-  <div class="menu-overlay" [class.menu-overlay--visivel]="menuAberto"
-    (click)="menuAberto = false" (touchstart)="menuAberto = false">
+  <div class="menu-overlay" [class.menu-overlay--visivel]="menuAberto" (click)="menuAberto = false"
+    (touchstart)="menuAberto = false">
   </div>
 </header>
