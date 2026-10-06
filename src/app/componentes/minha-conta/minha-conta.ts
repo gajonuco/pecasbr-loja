@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Cliente } from '../../../model/Cliente';
-import { Endereco } from '../../../model/Endereco';
-import { Pedido } from '../../../model/Pedido';
-import { AuthService } from '../../../services/auth-service';
-import { ClienteService } from '../../../services/cliente-service';
-import { PedidoService } from '../../../services/pedido-service';
+import { Cliente } from '../../model/Cliente';
+import { Endereco } from '../../model/Endereco';
+import { Pedido } from '../../model/Pedido';
+import { AuthService } from '../../services/auth-service';
+import { ClienteService } from '../../services/cliente-service';
+import { PedidoService } from '../../services/pedido-service';
 
 @Component({
   selector: 'app-minha-conta',
@@ -29,7 +29,7 @@ export class MinhaConta implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.auth.cliente$.subscribe((c) => (this.cliente = c));
+    this.auth.cliente$.subscribe((c) => (this.cliente = c, console.log("cliente:",this.cliente)));
     this.carregarEnderecos();
   }
 
@@ -51,6 +51,7 @@ export class MinhaConta implements OnInit {
 
   public carregarEnderecos(): void {
     this.clienteService.listarEnderecos().subscribe((res) => (this.enderecos = res));
+
   }
 
   public salvarNovoEndereco(): void {
