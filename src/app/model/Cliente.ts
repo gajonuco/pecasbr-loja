@@ -1,4 +1,4 @@
-import { Endereco}  from './Endereco';
+import { Endereco } from './Endereco';
 
 export class Cliente {
   public id!: number;
