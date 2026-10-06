@@ -4,13 +4,23 @@
     <label>
       E-mail
       <input type="email" name="email" [(ngModel)]="email" required>
+      @if(!email && tentouEnviar){
+        <span class="erro-campo">
+          Informe seu e-mail.
+        </span>
+      }
     </label>
     <label>
       Senha
       <input type="password" name="senha" [(ngModel)]="senha" required>
+      @if(!senha && tentouEnviar){
+        <span class="erro-campo">
+          Informe sua senha.
+        </span>
+      }
     </label>
     @if (erro){
-      <p class="erro">{{erro}}</p>
+    <p class="erro">{{erro}}</p>
     }
     <button type="submit" [disabled]="carregando">
       {{ carregando ? 'Entrando...' : 'Entrar'}}
