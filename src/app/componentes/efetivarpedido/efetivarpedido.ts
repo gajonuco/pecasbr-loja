@@ -192,7 +192,8 @@ export class Efetivarpedido implements OnInit {
     return nomeValido && telefoneValido && emailValido && freteDefinido && cpfValido;
   }
 
-
+  // ❌ REMOVIDO: onCampoObrigatorioAlterado() — não chama mais o Asaas antecipadamente.
+  // O link de pagamento é gerado pelo backend ao salvar o pedido.
 
   validarDataNasc(): void {
     const valor = this.cliente.dataNasc;

@@ -1,15 +1,14 @@
-<!-- efetivarpedido.html: -->
+<!-- finalizar.component.html -->
 
 <!-- Modal erro CPF -->
 <div class="modal-overlay" [class.modal-overlay--visivel]="modalCpfVisivel" (click)="fecharModalCpf()">
   <div class="modal-caixa" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
     <div class="modal-cabecalho">
       <p class="modal-titulo">{{ 'finalizar.modal_titulo' | translate }}</p>
-      <button class="modal-fechar" (click)="fecharModalCpf()" [attr.aria-label]="'finalizar.fechar' | translate">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round">
-          <line x1="1" y1="1" x2="11" y2="11" />
-          <line x1="11" y1="1" x2="1" y2="11" />
+      <button class="modal-fechar" (click)="fecharModalCpf()"
+        [attr.aria-label]="'finalizar.fechar' | translate">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
         </svg>
       </button>
     </div>
@@ -24,16 +23,19 @@
 
 <!-- Toast -->
 <div class="toast-wrapper" [class.toast-wrapper--visivel]="toastVisivel">
-  <div class="toast-custom" [class.toast-custom--sucesso]="toastType === 'success'"
-    [class.toast-custom--erro]="toastType === 'error'" [class.toast-custom--aviso]="toastType === 'warning'"
-    [class.toast-custom--info]="toastType === 'info'" role="alert" aria-live="assertive">
+  <div
+    class="toast-custom"
+    [class.toast-custom--sucesso]="toastType === 'success'"
+    [class.toast-custom--erro]="toastType === 'error'"
+    [class.toast-custom--aviso]="toastType === 'warning'"
+    [class.toast-custom--info]="toastType === 'info'"
+    role="alert" aria-live="assertive">
     <div class="toast-dot"></div>
     <span class="toast-mensagem">{{ mensagemToast }}</span>
-    <button class="toast-fechar" (click)="toastVisivel = false" [attr.aria-label]="'finalizar.fechar' | translate">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
-        stroke-linecap="round">
-        <line x1="1" y1="1" x2="11" y2="11" />
-        <line x1="11" y1="1" x2="1" y2="11" />
+    <button class="toast-fechar" (click)="toastVisivel = false"
+      [attr.aria-label]="'finalizar.fechar' | translate">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
       </svg>
     </button>
   </div>
@@ -56,10 +58,19 @@
 
     <div class="campo-grupo">
       <label class="campo-label" for="txtTelefone">{{ 'finalizar.whatsapp' | translate }}</label>
-      <input type="text" class="campo-input" id="txtTelefone"
-        [placeholder]="'finalizar.whatsapp_placeholder' | translate" [(ngModel)]="cliente.telefone" name="telefone"
-        #telefoneRef="ngModel" mask="(00) 00000-0000" [dropSpecialCharacters]="false"
-        (ngModelChange)="onTelefoneChange($event)" required />
+      <input
+        type="text"
+        class="campo-input"
+        id="txtTelefone"
+        [placeholder]="'finalizar.whatsapp_placeholder' | translate"
+        [(ngModel)]="cliente.telefone"
+        name="telefone"
+        #telefoneRef="ngModel"
+        mask="(00) 00000-0000"
+        [dropSpecialCharacters]="false"
+        (ngModelChange)="onTelefoneChange($event)"
+        required
+      />
       <span *ngIf="telefoneRef.invalid && telefoneRef.touched" class="campo-erro">
         {{ 'finalizar.erro_telefone' | translate }}
       </span>
@@ -68,237 +79,315 @@
 
   @if (buscouTelefone) {
 
-  <!-- Banner boas-vindas (cliente novo) -->
-  @if (!achou) {
-  <div class="banner-boas-vindas">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-      stroke-linecap="round">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-    {{ 'finalizar.boas_vindas' | translate }}
-  </div>
-  }
-
-  <!-- ── Dados pessoais ── -->
-  <div class="form-card">
-    <p class="form-card-titulo">{{ 'finalizar.dados_pessoais' | translate }}</p>
-
-    <!-- Nome -->
-    <div class="campo-grupo">
-      <label class="campo-label" for="txtNome">{{ 'finalizar.nome' | translate }}</label>
-      <input type="text" class="campo-input" id="txtNome" name="nome" #nomeRef="ngModel" [(ngModel)]="cliente.nome"
-        (blur)="onCampoObrigatorioAlterado()" (input)="onCampoObrigatorioAlterado()"
-        [placeholder]="'finalizar.nome_placeholder' | translate" required minlength="3" />
-      <span *ngIf="nomeRef.invalid && nomeRef.touched" class="campo-erro">
-        <ng-container *ngIf="nomeRef.errors?.['required']">{{ 'finalizar.erro_nome_obrigatorio' | translate
-          }}</ng-container>
-        <ng-container *ngIf="nomeRef.errors?.['minlength']">{{ 'finalizar.erro_nome_minimo' | translate
-          }}</ng-container>
-      </span>
-    </div>
-
-    <!-- E-mail -->
-    <div class="campo-grupo">
-      <label class="campo-label" for="txtEmail">{{ 'finalizar.email' | translate }}</label>
-      <input type="email" class="campo-input" id="txtEmail" name="email" #emailRef="ngModel" [(ngModel)]="cliente.email"
-        (blur)="onCampoObrigatorioAlterado()" (input)="onCampoObrigatorioAlterado()"
-        [placeholder]="'finalizar.email_placeholder' | translate" required email />
-      <span *ngIf="emailRef.invalid && emailRef.touched" class="campo-erro">
-        <ng-container *ngIf="emailRef.errors?.['required']">{{ 'finalizar.erro_email_obrigatorio' | translate
-          }}</ng-container>
-        <ng-container *ngIf="emailRef.errors?.['email']">{{ 'finalizar.erro_email_invalido' | translate
-          }}</ng-container>
-      </span>
-    </div>
-
-    <!-- CPF + Data de nascimento -->
-    <div class="campo-linha">
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtCpf">
-          {{ 'finalizar.cpf' | translate }}
-          <span class="campo-opcional">({{ 'finalizar.opcional' | translate }})</span>
-        </label>
-        <input type="text" class="campo-input" id="txtCpf" name="cpf" [(ngModel)]="cliente.cpf"
-          placeholder="123.456.789-00" mask="000.000.000-00" [dropSpecialCharacters]="false"
-          (ngModelChange)="onCpfChange($event)" />
+    <!-- Banner boas-vindas (cliente novo) -->
+    @if (!achou) {
+      <div class="banner-boas-vindas">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        {{ 'finalizar.boas_vindas' | translate }}
       </div>
-
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtDataNasc">
-          {{ 'finalizar.data_nasc' | translate }}
-          <span class="campo-opcional">({{ 'finalizar.opcional' | translate }})</span>
-        </label>
-        <input type="text" class="campo-input" id="txtDataNasc" name="dataNasc" #dataNascRef="ngModel"
-          [(ngModel)]="cliente.dataNasc" [placeholder]="'finalizar.data_nasc_placeholder' | translate" mask="00/00/0000"
-          [dropSpecialCharacters]="false" (ngModelChange)="onDataNascChange($event)" />
-        <span *ngIf="dataNascInvalida" class="campo-erro">
-          {{ 'finalizar.erro_data_nasc' | translate }}
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Pergunta endereço ── -->
-  @if (exibirPerguntaEndereco) {
-  <div class="form-card form-card--pergunta">
-    <p class="pergunta-texto">
-      {{ 'finalizar.endereco_mesmo' | translate }} <strong>{{ msgEndereco }}</strong>{{ 'finalizar.endereco_mesmo_fim' |
-      translate }}
-    </p>
-    <div class="pergunta-acoes">
-      <button type="button" class="btn-secundario" (click)="ocultarForm()">{{ 'finalizar.sim_continua' | translate
-        }}</button>
-      <button type="button" class="btn-primario-outline" (click)="exibirForm()">{{ 'finalizar.nao_alterar' | translate
-        }}</button>
-    </div>
-  </div>
-  }
-
-  <!-- ── Endereço (cliente logado) ── -->
-  @if (logado && !retirar) {
-  <div class="form-card">
-    <p class="form-card-titulo">{{ 'finalizar.endereco_entrega' | translate }}</p>
-    @for (end of meusEnderecos; track end.id) {
-    <label class="campo-radio">
-      <input type="radio" name="enderecoSalvo" [checked]="end.id === enderecoSelecionadoId"
-        (change)="selecionarEndereco(end.id)">
-      {{ end.apelido || 'Endereço' }} — {{ end.logradouro }}, {{ end.numero }}, {{ end.bairro }}, {{ end.cidade }}/{{
-      end.estado }}
-    </label>
-    } @empty {
-    <p>Você ainda não tem endereços salvos. <a routerLink="/minha-conta">Adicione um na Minha Conta</a>.</p>
-    }
-  </div>
-  }
-  @if (!logado && exibirFormEndereco) {
-  <div class="form-card">
-    <p class="form-card-titulo">{{ 'finalizar.endereco_entrega' | translate }}</p>
-
-    <!-- CEP -->
-    <div class="campo-grupo">
-      <label class="campo-label" for="txtCep">{{ 'finalizar.cep' | translate }}</label>
-      <input type="text" class="campo-input" id="txtCep" name="cep" #cepRef="ngModel" [(ngModel)]="cliente.cep"
-        placeholder="00000-000" mask="00000-000" [dropSpecialCharacters]="false"
-        (ngModelChange)="onCepChange($event)" />
-      <span *ngIf="cepRef.touched && cepInvalido" class="campo-erro">
-        {{ 'finalizar.erro_cep' | translate }}
-      </span>
-    </div>
-
-    <!-- Logradouro -->
-    <div class="campo-grupo">
-      <label class="campo-label" for="txtLogradouro">{{ 'finalizar.logradouro' | translate }}</label>
-      <input type="text" class="campo-input" id="txtLogradouro" name="logradouro" #logradouroRef="ngModel"
-        [(ngModel)]="cliente.logradouro" required />
-      <span *ngIf="logradouroRef.invalid && logradouroRef.touched" class="campo-erro">
-        {{ 'finalizar.erro_logradouro' | translate }}
-      </span>
-    </div>
-
-    <!-- Número + Complemento -->
-    <div class="campo-linha">
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtNumero">{{ 'finalizar.numero' | translate }}</label>
-        <input type="text" class="campo-input" id="txtNumero" name="numero" #numeroRef="ngModel"
-          [(ngModel)]="cliente.numero" (blur)="onCampoObrigatorioAlterado()" (input)="onCampoObrigatorioAlterado()"
-          required />
-        <span *ngIf="numeroRef.invalid && numeroRef.touched" class="campo-erro">
-          {{ 'finalizar.erro_numero' | translate }}
-        </span>
-      </div>
-
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtComplemento">{{ 'finalizar.complemento' | translate }}</label>
-        <input type="text" class="campo-input" id="txtComplemento" name="complemento" [(ngModel)]="cliente.complemento"
-          [placeholder]="'finalizar.complemento_placeholder' | translate" />
-      </div>
-    </div>
-
-    <!-- Bairro + Cidade + UF -->
-    <div class="campo-linha campo-linha--3">
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtBairro">{{ 'finalizar.bairro' | translate }}</label>
-        <input type="text" class="campo-input" id="txtBairro" name="bairro" #bairroRef="ngModel"
-          [(ngModel)]="cliente.bairro" required />
-        <span *ngIf="bairroRef.invalid && bairroRef.touched" class="campo-erro">
-          {{ 'finalizar.erro_bairro' | translate }}
-        </span>
-      </div>
-
-      <div class="campo-grupo">
-        <label class="campo-label" for="txtCidade">{{ 'finalizar.cidade' | translate }}</label>
-        <input type="text" class="campo-input" id="txtCidade" name="cidade" #cidadeRef="ngModel"
-          [(ngModel)]="cliente.cidade" required />
-        <span *ngIf="cidadeRef.invalid && cidadeRef.touched" class="campo-erro">
-          {{ 'finalizar.erro_cidade' | translate }}
-        </span>
-      </div>
-
-      <div class="campo-grupo campo-grupo--uf">
-        <label class="campo-label" for="txtEstado">{{ 'finalizar.uf' | translate }}</label>
-        <input type="text" class="campo-input" id="txtEstado" name="estado" #estadoRef="ngModel"
-          [(ngModel)]="cliente.estado" maxlength="2" required />
-        <span *ngIf="estadoRef.invalid && estadoRef.touched" class="campo-erro">
-          {{ 'finalizar.erro_uf' | translate }}
-        </span>
-      </div>
-    </div>
-
-  </div>
-  }
-
-  <!-- ── Frete ── -->
-  <div class="form-card form-card--frete">
-    <div class="frete-info">
-      <p class="frete-label">{{ 'finalizar.frete_previsto' | translate }}</p>
-      <p class="frete-valor">{{ msgFrete }}</p>
-    </div>
-    <label class="toggle-wrapper">
-      <input type="checkbox" class="toggle-input" id="chkRetirar" [(ngModel)]="retirar" (change)="calculaFreteReal()" />
-      <span class="toggle-track">
-        <span class="toggle-thumb"></span>
-      </span>
-      <span class="toggle-label">{{ 'finalizar.prefiro_retirar' | translate }}</span>
-    </label>
-  </div>
-
-  <!-- ── Observações ── -->
-  <div class="form-card">
-    <div class="campo-grupo">
-      <label class="campo-label" for="txtObservacoes">{{ 'finalizar.observacoes' | translate }}</label>
-      <input type="text" class="campo-input" id="txtObservacoes" name="observacoes" [(ngModel)]="pedido.observacoes"
-        (blur)="onCampoObrigatorioAlterado()" (input)="onCampoObrigatorioAlterado()"
-        [placeholder]="'finalizar.observacoes_placeholder' | translate" />
-    </div>
-  </div>
-
-  <!-- ── Ações ── -->
-  <div class="form-acoes">
-
-    @if (emProcessamento) {
-    <div class="processando-wrap">
-      <span class="spinner"></span>
-      <span class="processando-texto">{{ 'finalizar.processando' | translate }}</span>
-    </div>
     }
 
-    @if (!emProcessamento && formularioValido) {
-    <button type="button" class="btn-finalizar" (click)="finalizarPedido()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-        stroke-linecap="round">
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-      {{ 'finalizar.btn_finalizar' | translate }}
-    </button>
-    }
+    <!-- ── Dados pessoais ── -->
+    <div class="form-card">
+      <p class="form-card-titulo">{{ 'finalizar.dados_pessoais' | translate }}</p>
 
-    @if (!emProcessamento && !formularioValido && buscouTelefone) {
-    <div class="aviso-campos">
-      {{ 'finalizar.aviso_campos' | translate }}
+      <!-- Nome -->
+      <div class="campo-grupo">
+        <label class="campo-label" for="txtNome">{{ 'finalizar.nome' | translate }}</label>
+        <input
+          type="text"
+          class="campo-input"
+          id="txtNome"
+          name="nome"
+          #nomeRef="ngModel"
+          [(ngModel)]="cliente.nome"
+          (blur)="onCampoObrigatorioAlterado()"
+          (input)="onCampoObrigatorioAlterado()"
+          [placeholder]="'finalizar.nome_placeholder' | translate"
+          required
+          minlength="3"
+        />
+        <span *ngIf="nomeRef.invalid && nomeRef.touched" class="campo-erro">
+          <ng-container *ngIf="nomeRef.errors?.['required']">{{ 'finalizar.erro_nome_obrigatorio' | translate }}</ng-container>
+          <ng-container *ngIf="nomeRef.errors?.['minlength']">{{ 'finalizar.erro_nome_minimo' | translate }}</ng-container>
+        </span>
+      </div>
+
+      <!-- E-mail -->
+      <div class="campo-grupo">
+        <label class="campo-label" for="txtEmail">{{ 'finalizar.email' | translate }}</label>
+        <input
+          type="email"
+          class="campo-input"
+          id="txtEmail"
+          name="email"
+          #emailRef="ngModel"
+          [(ngModel)]="cliente.email"
+          (blur)="onCampoObrigatorioAlterado()"
+          (input)="onCampoObrigatorioAlterado()"
+          [placeholder]="'finalizar.email_placeholder' | translate"
+          required
+          email
+        />
+        <span *ngIf="emailRef.invalid && emailRef.touched" class="campo-erro">
+          <ng-container *ngIf="emailRef.errors?.['required']">{{ 'finalizar.erro_email_obrigatorio' | translate }}</ng-container>
+          <ng-container *ngIf="emailRef.errors?.['email']">{{ 'finalizar.erro_email_invalido' | translate }}</ng-container>
+        </span>
+      </div>
+
+      <!-- CPF + Data de nascimento -->
+      <div class="campo-linha">
+        <div class="campo-grupo">
+          <label class="campo-label" for="txtCpf">
+            {{ 'finalizar.cpf' | translate }}
+            <span class="campo-opcional">({{ 'finalizar.opcional' | translate }})</span>
+          </label>
+          <input
+            type="text"
+            class="campo-input"
+            id="txtCpf"
+            name="cpf"
+            [(ngModel)]="cliente.cpf"
+            placeholder="123.456.789-00"
+            mask="000.000.000-00"
+            [dropSpecialCharacters]="false"
+            (ngModelChange)="onCpfChange($event)"
+          />
+        </div>
+
+        <div class="campo-grupo">
+          <label class="campo-label" for="txtDataNasc">
+            {{ 'finalizar.data_nasc' | translate }}
+            <span class="campo-opcional">({{ 'finalizar.opcional' | translate }})</span>
+          </label>
+          <input
+            type="text"
+            class="campo-input"
+            id="txtDataNasc"
+            name="dataNasc"
+            #dataNascRef="ngModel"
+            [(ngModel)]="cliente.dataNasc"
+            [placeholder]="'finalizar.data_nasc_placeholder' | translate"
+            mask="00/00/0000"
+            [dropSpecialCharacters]="false"
+            (ngModelChange)="onDataNascChange($event)"
+          />
+          <span *ngIf="dataNascInvalida" class="campo-erro">
+            {{ 'finalizar.erro_data_nasc' | translate }}
+          </span>
+        </div>
+      </div>
     </div>
+
+    <!-- ── Pergunta endereço ── -->
+    @if (exibirPerguntaEndereco) {
+      <div class="form-card form-card--pergunta">
+        <p class="pergunta-texto">
+          {{ 'finalizar.endereco_mesmo' | translate }} <strong>{{ msgEndereco }}</strong>{{ 'finalizar.endereco_mesmo_fim' | translate }}
+        </p>
+        <div class="pergunta-acoes">
+          <button type="button" class="btn-secundario" (click)="ocultarForm()">{{ 'finalizar.sim_continua' | translate }}</button>
+          <button type="button" class="btn-primario-outline" (click)="exibirForm()">{{ 'finalizar.nao_alterar' | translate }}</button>
+        </div>
+      </div>
     }
 
-  </div>
+    <!-- ── Endereço ── -->
+    @if (exibirFormEndereco) {
+      <div class="form-card">
+        <p class="form-card-titulo">{{ 'finalizar.endereco_entrega' | translate }}</p>
+
+        <!-- CEP -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="txtCep">{{ 'finalizar.cep' | translate }}</label>
+          <input
+            type="text"
+            class="campo-input"
+            id="txtCep"
+            name="cep"
+            #cepRef="ngModel"
+            [(ngModel)]="cliente.cep"
+            placeholder="00000-000"
+            mask="00000-000"
+            [dropSpecialCharacters]="false"
+            (ngModelChange)="onCepChange($event)"
+          />
+          <span *ngIf="cepRef.touched && cepInvalido" class="campo-erro">
+            {{ 'finalizar.erro_cep' | translate }}
+          </span>
+        </div>
+
+        <!-- Logradouro -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="txtLogradouro">{{ 'finalizar.logradouro' | translate }}</label>
+          <input
+            type="text"
+            class="campo-input"
+            id="txtLogradouro"
+            name="logradouro"
+            #logradouroRef="ngModel"
+            [(ngModel)]="cliente.logradouro"
+            required
+          />
+          <span *ngIf="logradouroRef.invalid && logradouroRef.touched" class="campo-erro">
+            {{ 'finalizar.erro_logradouro' | translate }}
+          </span>
+        </div>
+
+        <!-- Número + Complemento -->
+        <div class="campo-linha">
+          <div class="campo-grupo">
+            <label class="campo-label" for="txtNumero">{{ 'finalizar.numero' | translate }}</label>
+            <input
+              type="text"
+              class="campo-input"
+              id="txtNumero"
+              name="numero"
+              #numeroRef="ngModel"
+              [(ngModel)]="cliente.numero"
+              (blur)="onCampoObrigatorioAlterado()"
+              (input)="onCampoObrigatorioAlterado()"
+              required
+            />
+            <span *ngIf="numeroRef.invalid && numeroRef.touched" class="campo-erro">
+              {{ 'finalizar.erro_numero' | translate }}
+            </span>
+          </div>
+
+          <div class="campo-grupo">
+            <label class="campo-label" for="txtComplemento">{{ 'finalizar.complemento' | translate }}</label>
+            <input
+              type="text"
+              class="campo-input"
+              id="txtComplemento"
+              name="complemento"
+              [(ngModel)]="cliente.complemento"
+              [placeholder]="'finalizar.complemento_placeholder' | translate"
+            />
+          </div>
+        </div>
+
+        <!-- Bairro + Cidade + UF -->
+        <div class="campo-linha campo-linha--3">
+          <div class="campo-grupo">
+            <label class="campo-label" for="txtBairro">{{ 'finalizar.bairro' | translate }}</label>
+            <input
+              type="text"
+              class="campo-input"
+              id="txtBairro"
+              name="bairro"
+              #bairroRef="ngModel"
+              [(ngModel)]="cliente.bairro"
+              required
+            />
+            <span *ngIf="bairroRef.invalid && bairroRef.touched" class="campo-erro">
+              {{ 'finalizar.erro_bairro' | translate }}
+            </span>
+          </div>
+
+          <div class="campo-grupo">
+            <label class="campo-label" for="txtCidade">{{ 'finalizar.cidade' | translate }}</label>
+            <input
+              type="text"
+              class="campo-input"
+              id="txtCidade"
+              name="cidade"
+              #cidadeRef="ngModel"
+              [(ngModel)]="cliente.cidade"
+              required
+            />
+            <span *ngIf="cidadeRef.invalid && cidadeRef.touched" class="campo-erro">
+              {{ 'finalizar.erro_cidade' | translate }}
+            </span>
+          </div>
+
+          <div class="campo-grupo campo-grupo--uf">
+            <label class="campo-label" for="txtEstado">{{ 'finalizar.uf' | translate }}</label>
+            <input
+              type="text"
+              class="campo-input"
+              id="txtEstado"
+              name="estado"
+              #estadoRef="ngModel"
+              [(ngModel)]="cliente.estado"
+              maxlength="2"
+              required
+            />
+            <span *ngIf="estadoRef.invalid && estadoRef.touched" class="campo-erro">
+              {{ 'finalizar.erro_uf' | translate }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ── Frete ── -->
+    <div class="form-card form-card--frete">
+      <div class="frete-info">
+        <p class="frete-label">{{ 'finalizar.frete_previsto' | translate }}</p>
+        <p class="frete-valor">{{ msgFrete }}</p>
+      </div>
+      <label class="toggle-wrapper">
+        <input
+          type="checkbox"
+          class="toggle-input"
+          id="chkRetirar"
+          [(ngModel)]="retirar"
+          (change)="calculaFreteReal()"
+        />
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+        <span class="toggle-label">{{ 'finalizar.prefiro_retirar' | translate }}</span>
+      </label>
+    </div>
+
+    <!-- ── Observações ── -->
+    <div class="form-card">
+      <div class="campo-grupo">
+        <label class="campo-label" for="txtObservacoes">{{ 'finalizar.observacoes' | translate }}</label>
+        <input
+          type="text"
+          class="campo-input"
+          id="txtObservacoes"
+          name="observacoes"
+          [(ngModel)]="pedido.observacoes"
+          (blur)="onCampoObrigatorioAlterado()"
+          (input)="onCampoObrigatorioAlterado()"
+          [placeholder]="'finalizar.observacoes_placeholder' | translate"
+        />
+      </div>
+    </div>
+
+    <!-- ── Ações ── -->
+    <div class="form-acoes">
+
+      @if (emProcessamento) {
+        <div class="processando-wrap">
+          <span class="spinner"></span>
+          <span class="processando-texto">{{ 'finalizar.processando' | translate }}</span>
+        </div>
+      }
+
+      @if (!emProcessamento && formularioValido) {
+        <button type="button" class="btn-finalizar" (click)="finalizarPedido()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {{ 'finalizar.btn_finalizar' | translate }}
+        </button>
+      }
+
+      @if (!emProcessamento && !formularioValido && buscouTelefone) {
+        <div class="aviso-campos">
+          {{ 'finalizar.aviso_campos' | translate }}
+        </div>
+      }
+
+    </div>
 
   }
 
