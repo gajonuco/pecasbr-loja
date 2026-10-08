@@ -6,9 +6,9 @@ import { Efetivarpedido } from './componentes/efetivarpedido/efetivarpedido';
 import { Recibo } from './componentes/recibo/recibo';
 import { Buscacategoria } from './componentes/buscacategoria/buscacategoria';
 import { BuscaPalavraChave } from './componentes/busca-palavra-chave/busca-palavra-chave';
-import { Cadastro } from './componentes/cadastro/cadastro/cadastro';
-import { Login } from './componentes/login/login/login';
-import { MinhaConta } from './componentes/minha-conta/minha-conta/minha-conta';
+import { Cadastro } from './componentes/cadastro/cadastro';
+import { Login } from './componentes/login/login';
+import { MinhaConta } from './componentes/minha-conta/minha-conta';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [

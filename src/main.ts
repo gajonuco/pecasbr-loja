@@ -6,6 +6,8 @@ import { LOCALE_ID }            from '@angular/core';
 import { registerLocaleData }   from '@angular/common';
 import localePt                 from '@angular/common/locales/pt';
 import { appConfig }            from './app/app.config';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './app/interceptors/auth-interceptor';
 
 registerLocaleData(localePt);
 
@@ -16,7 +18,8 @@ bootstrapApplication(App, {
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 });
 
