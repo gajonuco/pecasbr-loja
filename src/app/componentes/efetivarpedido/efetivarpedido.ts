@@ -11,7 +11,7 @@ import { EntidadeCEP } from '../../model/EntidadeCEP';
 import { CarrinhoService } from '../../services/carrinho-service';
 import { Frete } from '../../model/Frete';
 import { FreteService } from '../../services/frete-servico';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { TranslateModule } from '@ngx-translate/core';
 import { CriarPedidoPayload } from '../../model/CriarPedidoPayload';
@@ -30,7 +30,7 @@ declare var bootstrap: any;
 
 @Component({
   selector: 'app-efetivarpedido',
-  imports: [FormsModule, CommonModule, NgxMaskPipe, NgxMaskDirective, TranslateModule],
+  imports: [FormsModule, CommonModule, NgxMaskDirective, TranslateModule],
   providers: [provideNgxMask()],
   templateUrl: './efetivarpedido.html',
   styleUrl: './efetivarpedido.scss'
