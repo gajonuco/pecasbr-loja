@@ -14,6 +14,9 @@ import { FreteService } from '../../services/frete-servico';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { TranslateModule } from '@ngx-translate/core';
+import { CriarPedidoPayload } from '../../model/CriarPedidoPayload';
+import { AuthService } from '../../services/auth-service';
+import { Endereco } from '../../model/Endereco';
 
 
 // ❌ REMOVIDO: import { DTOResponse } from '../../model/DTOResponse';
@@ -55,10 +58,10 @@ export class Efetivarpedido implements OnInit {
   public retirar!: boolean;
   public dataNascInvalida!: boolean;
   public modalCpfVisivel: boolean = false;
-   public toastVisivel: boolean = false;
-
-  // ❌ REMOVIDO: private wsSub!: Subscription;
-  // ❌ REMOVIDO: public emProcessamentoAsaas: boolean = false;
+  public toastVisivel: boolean = false;
+  public logado = false;
+  public meusEnderecos: Endereco[] = [];
+  public enderecoSelecionadoId: number | null = null;
 
   constructor(
     private cliServico: ClienteService,
@@ -67,9 +70,9 @@ export class Efetivarpedido implements OnInit {
     private carService: CarrinhoService,
     private cepService: BuscarCepService,
     private freteService: FreteService,
-    private maskService: NgxMaskService
-    // ❌ REMOVIDO: private wsService: WebSocketService
-    // ❌ REMOVIDO: private IntegracaoAsaas: IntegracaoAsaas
+    private maskService: NgxMaskService,
+    private authService: AuthService,
+
   ) {
     this.cliente = new Cliente();
     this.pedido = new Pedido();
@@ -88,9 +91,38 @@ export class Efetivarpedido implements OnInit {
     this.dataNascInvalida = false;
   }
 
-  ngOnInit(): void { }
 
-  // ─── Formatação de campos mascarados ───────────────────────────────────────
+
+  ngOnInit(): void {
+    this.logado = this.authService.estaLogado();
+    if (this.logado && this.authService.clienteAtual) {
+      const c = this.authService.clienteAtual;
+      this.cliente.nome = c.nome;
+      this.cliente.email = c.email;
+      this.cliente.telefone = c.telefone;
+      this.cliente.cpf = c.cpf;
+      this.cliente.dataNasc = c.dataNasc;
+      this.cliServico.listarEnderecos().subscribe((res) => {
+        this.meusEnderecos = res;
+        const principal = res.find((e) => e.principal);
+        if (principal) this.selecionarEndereco(principal.id);
+      });
+    }
+  }
+
+  public selecionarEndereco(id: number): void {
+    const end = this.meusEnderecos.find((e) => e.id === id);
+    if (!end) return;
+    this.enderecoSelecionadoId = id;
+    this.cliente.cep = end.cep;
+    this.cliente.logradouro = end.logradouro;
+    this.cliente.numero = end.numero;
+    this.cliente.complemento = end.complemento;
+    this.cliente.bairro = end.bairro;
+    this.cliente.cidade = end.cidade;
+    this.cliente.estado = end.estado;
+    this.ocultarForm();
+  }
 
   formatarCamposMascarados(): void {
     if (this.cliente.telefone) {
@@ -414,19 +446,47 @@ export class Efetivarpedido implements OnInit {
 
     const pedidoTmp: Pedido = JSON.parse(carrinhoString);
 
-    // ✅ converte apenas uma vez, usando variável local — não toca no model
-    const clienteParaEnviar = Object.assign(new Cliente(), this.cliente);
-    clienteParaEnviar.dataNasc = this.brParaISO(this.cliente.dataNasc);
+    const payload: CriarPedidoPayload = {
+      itens: pedidoTmp.itensPedido.map(i => ({
+        idPeca: i.peca.id,
+        quantidade: i.qtdtItem,
+        idVariacao: i.variacao?.id,
+        corEscolhida: i.corEscolhida,
+        tamanhoEscolhido: i.tamanhoEscolhido
+      })),
+      observacoes: this.pedido.observacoes,
+      retirar: !!this.retirar
+    };
 
-    this.pedido.cliente = clienteParaEnviar;
-    this.pedido.itensPedido = pedidoTmp.itensPedido;
-    this.pedido.valorFrete = this.freteReal;
-    this.pedido.valorTotal = pedidoTmp.valorTotal + this.freteReal;
-    this.pedido.status = 0;
+    if (!this.retirar) {
+      if (this.logado && this.enderecoSelecionadoId) {
+        payload.idEndereco = this.enderecoSelecionadoId;
+      } else {
+        payload.enderecoNovo = {
+          cep: this.cliente.cep,
+          logradouro: this.cliente.logradouro,
+          numero: this.cliente.numero,
+          complemento: this.cliente.complemento,
+          bairro: this.cliente.bairro,
+          cidade: this.cliente.cidade,
+          estado: this.cliente.estado
+        };
+      }
+    }
+
+    if (!this.logado) {
+      payload.cliente = {
+        nome: this.cliente.nome,
+        email: this.cliente.email,
+        cpf: this.cliente.cpf,
+        telefone: this.cliente.telefone,
+        dataNasc: this.brParaISO(this.cliente.dataNasc)
+      };
+    }
 
     this.emProcessamento = true;
 
-    this.pedService.inserirNovoPedido(this.pedido).subscribe({
+    this.pedService.inserirNovoPedido(payload).subscribe({
       next: (res: Pedido) => {
         this.mensagemToast = `Pedido registrado! Nº ${res.id} — Aguardando pagamento.`;
         this.toastType = 'success';
@@ -436,7 +496,7 @@ export class Efetivarpedido implements OnInit {
         window.location.href = res.linkPagamento;
       },
       error: (err) => {
-        console.error('Erro ao finalizar pedido:', err); // ← veja o console após testar
+        console.error('Erro ao finalizar pedido:', err);
         this.mensagemToast = 'Não consegui efetivar seu pedido';
         this.toastType = 'error';
         this.mostrarToast(this.mensagemToast, this.toastType);
@@ -447,14 +507,14 @@ export class Efetivarpedido implements OnInit {
 
   // ─── Toast ─────────────────────────────────────────────────────────────────
 
-mostrarToast(mensagem: string, tipo: string) {
-  this.mensagemToast = mensagem;
-  this.toastType = tipo;
-  this.toastVisivel = true;
-  setTimeout(() => this.toastVisivel = false, 3500);
-}
+  mostrarToast(mensagem: string, tipo: string) {
+    this.mensagemToast = mensagem;
+    this.toastType = tipo;
+    this.toastVisivel = true;
+    setTimeout(() => this.toastVisivel = false, 3500);
+  }
 
   fecharModalCpf() {
-  this.modalCpfVisivel = false;
-}
+    this.modalCpfVisivel = false;
+  }
 }
