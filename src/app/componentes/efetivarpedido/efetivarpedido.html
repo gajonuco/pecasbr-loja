@@ -50,6 +50,7 @@
     <h2 class="titulo-secao">{{ 'finalizar.titulo' | translate }}</h2>
   </header>
 
+  @if (!logado) {
   <!-- ── Busca por telefone ── -->
   <div class="form-card">
     <p class="form-card-titulo">{{ 'finalizar.identificacao' | translate }}</p>
@@ -65,9 +66,12 @@
       </span>
     </div>
   </div>
+  }
 
-  @if (buscouTelefone) {
 
+  @if (buscouTelefone || logado) {
+
+  @if(!logado){
   <!-- Banner boas-vindas (cliente novo) -->
   @if (!achou) {
   <div class="banner-boas-vindas">
@@ -137,6 +141,7 @@
       </div>
     </div>
   </div>
+  }
 
   <!-- ── Pergunta endereço ── -->
   @if (exibirPerguntaEndereco) {

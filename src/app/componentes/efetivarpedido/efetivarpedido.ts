@@ -17,14 +17,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CriarPedidoPayload } from '../../model/CriarPedidoPayload';
 import { AuthService } from '../../services/auth-service';
 import { Endereco } from '../../model/Endereco';
+import { filter, take } from 'rxjs';
 
-
-// ❌ REMOVIDO: import { DTOResponse } from '../../model/DTOResponse';
-// ❌ REMOVIDO: import { IntegracaoAsaas } from './../../services/integracao-asaas';
-// ❌ REMOVIDO: import { WebSocketService } from '../../services/web-socket-service';
-// ❌ REMOVIDO: import { Subscription } from 'rxjs';
-// O backend já cria o link de pagamento dentro de inserirPedido().
-// O frontend apenas lê o linkPagamento que vem na resposta e redireciona para /recibo/{id}.
 
 declare var bootstrap: any;
 
@@ -95,19 +89,22 @@ export class Efetivarpedido implements OnInit {
 
   ngOnInit(): void {
     this.logado = this.authService.estaLogado();
-    if (this.logado && this.authService.clienteAtual) {
-      const c = this.authService.clienteAtual;
-      this.cliente.nome = c.nome;
-      this.cliente.email = c.email;
-      this.cliente.telefone = c.telefone;
-      this.cliente.cpf = c.cpf;
-      this.cliente.dataNasc = c.dataNasc;
-      this.cliServico.listarEnderecos().subscribe((res) => {
-        this.meusEnderecos = res;
-        const principal = res.find((e) => e.principal);
-        if (principal) this.selecionarEndereco(principal.id);
-      });
-    }
+    if (!this.logado) return;
+
+    this.authService.cliente$
+      .pipe(filter((c): c is Cliente => c !== null), take(1))
+      .subscribe((c) => {
+        this.cliente.nome = c.nome;
+        this.cliente.email = c.email;
+        this.cliente.telefone = c.telefone;
+        this.cliente.cpf = c.cpf;
+        this.cliente.dataNasc = c.dataNasc ? this.isoParaBR(c.dataNasc) : '';
+        this.cliServico.listarEnderecos().subscribe((res) => {
+          this.meusEnderecos = res;
+          const principal = res.find((e) => e.principal);
+          if (principal) this.selecionarEndereco(principal.id);
+        });
+      })
   }
 
   public selecionarEndereco(id: number): void {
@@ -143,15 +140,30 @@ export class Efetivarpedido implements OnInit {
         '00000-000'
       );
     }
+
     if (this.cliente.dataNasc) {
       this.cliente.dataNasc = this.isoParaBR(this.cliente.dataNasc);
+      this.validarDataNasc();
     }
   }
 
   private isoParaBR(data: string): string {
-    if (!data || !data.includes('-')) return data;
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}/${mes}/${ano}`;
+    if (!data) return '';
+
+    // Já está no formato DD/MM/AAAA
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
+      return data;
+    }
+
+    // Formato AAAA-MM-DD
+    const match = data.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+    if (match) {
+      const [, ano, mes, dia] = match;
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    return data;
   }
 
   public brParaISO(data: string): string {
@@ -177,23 +189,28 @@ export class Efetivarpedido implements OnInit {
     const cpfDigitos = (this.cliente.cpf ?? '').replace(/\D/g, '');
     const cpfValido = cpfDigitos.length === 11 && this.isCPFValid();
 
-    console.log('Validação do formulário:', {
-      nome: this.cliente.nome,
-      nomeValido,
-      telefone: this.cliente.telefone,
-      telefoneValido,
-      email: this.cliente.email,
-      emailValido,
-      freteReal: this.freteReal,
-      freteDefinido,
-      cpf: this.cliente.cpf,
-      cpfValido
-    });
-    return nomeValido && telefoneValido && emailValido && freteDefinido && cpfValido;
+
+    /*     console.log('Validação do formulário:', {
+          nome: this.cliente.nome,
+          nomeValido,
+          telefone: this.cliente.telefone,
+          telefoneValido,
+          email: this.cliente.email,
+          emailValido,
+          freteReal: this.freteReal,
+          freteDefinido,
+          cpf: this.cliente.cpf,
+          Data_no_formulario: this.cliente.dataNasc,
+          Data_enviada_ao_backend: this.brParaISO(this.cliente.dataNasc),
+          cpfValido
+        });
+        return nomeValido && telefoneValido && emailValido && freteDefinido && cpfValido; */
+
+    const enderecoDefinido = this.retirar || !this.logado || this.enderecoSelecionadoId !== null;
+    const dadosOk = this.logado || (nomeValido && telefoneValido && emailValido && cpfValido);
+    return dadosOk && freteDefinido && enderecoDefinido;
   }
 
-  // ❌ REMOVIDO: onCampoObrigatorioAlterado() — não chama mais o Asaas antecipadamente.
-  // O link de pagamento é gerado pelo backend ao salvar o pedido.
 
   validarDataNasc(): void {
     const valor = this.cliente.dataNasc;
@@ -373,6 +390,11 @@ export class Efetivarpedido implements OnInit {
     this.cliServico.buscarClientePeloTelefone(this.cliente.telefone).subscribe({
       next: (cli: Cliente) => {
         this.cliente = Object.assign(new Cliente(), cli);
+
+        if (cli.dataNasc) {
+          this.cliente.dataNasc = this.isoParaBR(cli.dataNasc);
+        }
+
         this.achou = true;
         this.exibirPerguntaEndereco = true;
         this.exibirFormEndereco = false;
@@ -429,7 +451,7 @@ export class Efetivarpedido implements OnInit {
   // ─── Finalizar pedido ──────────────────────────────────────────────────────
 
   public finalizarPedido(): void {
-    if (this.cliente.nome.split(' ').length < 2) {
+    if (!this.logado && this.cliente.nome.split(' ').length < 2) {
       this.mensagemToast = 'Por favor informe nome e sobrenome';
       this.toastType = 'warning';
       this.mostrarToast(this.mensagemToast, this.toastType);
