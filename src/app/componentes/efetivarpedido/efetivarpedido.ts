@@ -467,6 +467,7 @@ export class Efetivarpedido implements OnInit {
     }
 
     const pedidoTmp: Pedido = JSON.parse(carrinhoString);
+    console.log('Pedido carrinho:', pedidoTmp);
 
     const payload: CriarPedidoPayload = {
       itens: pedidoTmp.itensPedido.map(i => ({
@@ -477,7 +478,8 @@ export class Efetivarpedido implements OnInit {
         tamanhoEscolhido: i.tamanhoEscolhido
       })),
       observacoes: this.pedido.observacoes,
-      retirar: !!this.retirar
+      retirar: !!this.retirar,
+      valorFrete: this.retirar ? 0 : (this.freteReal ?? 0)
     };
 
     if (!this.retirar) {
@@ -505,7 +507,7 @@ export class Efetivarpedido implements OnInit {
         dataNasc: this.brParaISO(this.cliente.dataNasc)
       };
     }
-
+    console.log('Pedido payload:', payload);
     this.emProcessamento = true;
 
     this.pedService.inserirNovoPedido(payload).subscribe({

@@ -32,4 +32,5 @@ export interface CriarPedidoPayload {
   retirar: boolean;
   idEndereco?: number;
   enderecoNovo?: EnderecoPayload;
+  valorFrete?: number;
 }
