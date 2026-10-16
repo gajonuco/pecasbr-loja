@@ -11,23 +11,20 @@ import { EntidadeCEP } from '../../model/EntidadeCEP';
 import { CarrinhoService } from '../../services/carrinho-service';
 import { Frete } from '../../model/Frete';
 import { FreteService } from '../../services/frete-servico';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { TranslateModule } from '@ngx-translate/core';
+import { CriarPedidoPayload } from '../../model/CriarPedidoPayload';
+import { AuthService } from '../../services/auth-service';
+import { Endereco } from '../../model/Endereco';
+import { filter, take } from 'rxjs';
 
-
-// ❌ REMOVIDO: import { DTOResponse } from '../../model/DTOResponse';
-// ❌ REMOVIDO: import { IntegracaoAsaas } from './../../services/integracao-asaas';
-// ❌ REMOVIDO: import { WebSocketService } from '../../services/web-socket-service';
-// ❌ REMOVIDO: import { Subscription } from 'rxjs';
-// O backend já cria o link de pagamento dentro de inserirPedido().
-// O frontend apenas lê o linkPagamento que vem na resposta e redireciona para /recibo/{id}.
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-efetivarpedido',
-  imports: [FormsModule, CommonModule, NgxMaskPipe, NgxMaskDirective, TranslateModule],
+  imports: [FormsModule, CommonModule, NgxMaskDirective, TranslateModule],
   providers: [provideNgxMask()],
   templateUrl: './efetivarpedido.html',
   styleUrl: './efetivarpedido.scss'
@@ -55,10 +52,10 @@ export class Efetivarpedido implements OnInit {
   public retirar!: boolean;
   public dataNascInvalida!: boolean;
   public modalCpfVisivel: boolean = false;
-   public toastVisivel: boolean = false;
-
-  // ❌ REMOVIDO: private wsSub!: Subscription;
-  // ❌ REMOVIDO: public emProcessamentoAsaas: boolean = false;
+  public toastVisivel: boolean = false;
+  public logado = false;
+  public meusEnderecos: Endereco[] = [];
+  public enderecoSelecionadoId: number | null = null;
 
   constructor(
     private cliServico: ClienteService,
@@ -67,9 +64,9 @@ export class Efetivarpedido implements OnInit {
     private carService: CarrinhoService,
     private cepService: BuscarCepService,
     private freteService: FreteService,
-    private maskService: NgxMaskService
-    // ❌ REMOVIDO: private wsService: WebSocketService
-    // ❌ REMOVIDO: private IntegracaoAsaas: IntegracaoAsaas
+    private maskService: NgxMaskService,
+    private authService: AuthService,
+
   ) {
     this.cliente = new Cliente();
     this.pedido = new Pedido();
@@ -88,9 +85,41 @@ export class Efetivarpedido implements OnInit {
     this.dataNascInvalida = false;
   }
 
-  ngOnInit(): void { }
 
-  // ─── Formatação de campos mascarados ───────────────────────────────────────
+
+  ngOnInit(): void {
+    this.logado = this.authService.estaLogado();
+    if (!this.logado) return;
+
+    this.authService.cliente$
+      .pipe(filter((c): c is Cliente => c !== null), take(1))
+      .subscribe((c) => {
+        this.cliente.nome = c.nome;
+        this.cliente.email = c.email;
+        this.cliente.telefone = c.telefone;
+        this.cliente.cpf = c.cpf;
+        this.cliente.dataNasc = c.dataNasc ? this.isoParaBR(c.dataNasc) : '';
+        this.cliServico.listarEnderecos().subscribe((res) => {
+          this.meusEnderecos = res;
+          const principal = res.find((e) => e.principal);
+          if (principal) this.selecionarEndereco(principal.id);
+        });
+      })
+  }
+
+  public selecionarEndereco(id: number): void {
+    const end = this.meusEnderecos.find((e) => e.id === id);
+    if (!end) return;
+    this.enderecoSelecionadoId = id;
+    this.cliente.cep = end.cep;
+    this.cliente.logradouro = end.logradouro;
+    this.cliente.numero = end.numero;
+    this.cliente.complemento = end.complemento;
+    this.cliente.bairro = end.bairro;
+    this.cliente.cidade = end.cidade;
+    this.cliente.estado = end.estado;
+    this.ocultarForm();
+  }
 
   formatarCamposMascarados(): void {
     if (this.cliente.telefone) {
@@ -111,15 +140,30 @@ export class Efetivarpedido implements OnInit {
         '00000-000'
       );
     }
+
     if (this.cliente.dataNasc) {
       this.cliente.dataNasc = this.isoParaBR(this.cliente.dataNasc);
+      this.validarDataNasc();
     }
   }
 
   private isoParaBR(data: string): string {
-    if (!data || !data.includes('-')) return data;
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}/${mes}/${ano}`;
+    if (!data) return '';
+
+    // Já está no formato DD/MM/AAAA
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
+      return data;
+    }
+
+    // Formato AAAA-MM-DD
+    const match = data.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+    if (match) {
+      const [, ano, mes, dia] = match;
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    return data;
   }
 
   public brParaISO(data: string): string {
@@ -145,23 +189,28 @@ export class Efetivarpedido implements OnInit {
     const cpfDigitos = (this.cliente.cpf ?? '').replace(/\D/g, '');
     const cpfValido = cpfDigitos.length === 11 && this.isCPFValid();
 
-    console.log('Validação do formulário:', {
-      nome: this.cliente.nome,
-      nomeValido,
-      telefone: this.cliente.telefone,
-      telefoneValido,
-      email: this.cliente.email,
-      emailValido,
-      freteReal: this.freteReal,
-      freteDefinido,
-      cpf: this.cliente.cpf,
-      cpfValido
-    });
-    return nomeValido && telefoneValido && emailValido && freteDefinido && cpfValido;
+
+    /*     console.log('Validação do formulário:', {
+          nome: this.cliente.nome,
+          nomeValido,
+          telefone: this.cliente.telefone,
+          telefoneValido,
+          email: this.cliente.email,
+          emailValido,
+          freteReal: this.freteReal,
+          freteDefinido,
+          cpf: this.cliente.cpf,
+          Data_no_formulario: this.cliente.dataNasc,
+          Data_enviada_ao_backend: this.brParaISO(this.cliente.dataNasc),
+          cpfValido
+        });
+        return nomeValido && telefoneValido && emailValido && freteDefinido && cpfValido; */
+
+    const enderecoDefinido = this.retirar || !this.logado || this.enderecoSelecionadoId !== null;
+    const dadosOk = this.logado || (nomeValido && telefoneValido && emailValido && cpfValido);
+    return dadosOk && freteDefinido && enderecoDefinido;
   }
 
-  // ❌ REMOVIDO: onCampoObrigatorioAlterado() — não chama mais o Asaas antecipadamente.
-  // O link de pagamento é gerado pelo backend ao salvar o pedido.
 
   validarDataNasc(): void {
     const valor = this.cliente.dataNasc;
@@ -341,6 +390,11 @@ export class Efetivarpedido implements OnInit {
     this.cliServico.buscarClientePeloTelefone(this.cliente.telefone).subscribe({
       next: (cli: Cliente) => {
         this.cliente = Object.assign(new Cliente(), cli);
+
+        if (cli.dataNasc) {
+          this.cliente.dataNasc = this.isoParaBR(cli.dataNasc);
+        }
+
         this.achou = true;
         this.exibirPerguntaEndereco = true;
         this.exibirFormEndereco = false;
@@ -397,7 +451,7 @@ export class Efetivarpedido implements OnInit {
   // ─── Finalizar pedido ──────────────────────────────────────────────────────
 
   public finalizarPedido(): void {
-    if (this.cliente.nome.split(' ').length < 2) {
+    if (!this.logado && this.cliente.nome.split(' ').length < 2) {
       this.mensagemToast = 'Por favor informe nome e sobrenome';
       this.toastType = 'warning';
       this.mostrarToast(this.mensagemToast, this.toastType);
@@ -413,20 +467,50 @@ export class Efetivarpedido implements OnInit {
     }
 
     const pedidoTmp: Pedido = JSON.parse(carrinhoString);
+    console.log('Pedido carrinho:', pedidoTmp);
 
-    // ✅ converte apenas uma vez, usando variável local — não toca no model
-    const clienteParaEnviar = Object.assign(new Cliente(), this.cliente);
-    clienteParaEnviar.dataNasc = this.brParaISO(this.cliente.dataNasc);
+    const payload: CriarPedidoPayload = {
+      itens: pedidoTmp.itensPedido.map(i => ({
+        idPeca: i.peca.id,
+        quantidade: i.qtdtItem,
+        idVariacao: i.variacao?.id,
+        corEscolhida: i.corEscolhida,
+        tamanhoEscolhido: i.tamanhoEscolhido
+      })),
+      observacoes: this.pedido.observacoes,
+      retirar: !!this.retirar,
+      valorFrete: this.retirar ? 0 : (this.freteReal ?? 0)
+    };
 
-    this.pedido.cliente = clienteParaEnviar;
-    this.pedido.itensPedido = pedidoTmp.itensPedido;
-    this.pedido.valorFrete = this.freteReal;
-    this.pedido.valorTotal = pedidoTmp.valorTotal + this.freteReal;
-    this.pedido.status = 0;
+    if (!this.retirar) {
+      if (this.logado && this.enderecoSelecionadoId) {
+        payload.idEndereco = this.enderecoSelecionadoId;
+      } else {
+        payload.enderecoNovo = {
+          cep: this.cliente.cep,
+          logradouro: this.cliente.logradouro,
+          numero: this.cliente.numero,
+          complemento: this.cliente.complemento,
+          bairro: this.cliente.bairro,
+          cidade: this.cliente.cidade,
+          estado: this.cliente.estado
+        };
+      }
+    }
 
+    if (!this.logado) {
+      payload.cliente = {
+        nome: this.cliente.nome,
+        email: this.cliente.email,
+        cpf: this.cliente.cpf,
+        telefone: this.cliente.telefone,
+        dataNasc: this.brParaISO(this.cliente.dataNasc)
+      };
+    }
+    console.log('Pedido payload:', payload);
     this.emProcessamento = true;
 
-    this.pedService.inserirNovoPedido(this.pedido).subscribe({
+    this.pedService.inserirNovoPedido(payload).subscribe({
       next: (res: Pedido) => {
         this.mensagemToast = `Pedido registrado! Nº ${res.id} — Aguardando pagamento.`;
         this.toastType = 'success';
@@ -436,7 +520,7 @@ export class Efetivarpedido implements OnInit {
         window.location.href = res.linkPagamento;
       },
       error: (err) => {
-        console.error('Erro ao finalizar pedido:', err); // ← veja o console após testar
+        console.error('Erro ao finalizar pedido:', err);
         this.mensagemToast = 'Não consegui efetivar seu pedido';
         this.toastType = 'error';
         this.mostrarToast(this.mensagemToast, this.toastType);
@@ -447,14 +531,14 @@ export class Efetivarpedido implements OnInit {
 
   // ─── Toast ─────────────────────────────────────────────────────────────────
 
-mostrarToast(mensagem: string, tipo: string) {
-  this.mensagemToast = mensagem;
-  this.toastType = tipo;
-  this.toastVisivel = true;
-  setTimeout(() => this.toastVisivel = false, 3500);
-}
+  mostrarToast(mensagem: string, tipo: string) {
+    this.mensagemToast = mensagem;
+    this.toastType = tipo;
+    this.toastVisivel = true;
+    setTimeout(() => this.toastVisivel = false, 3500);
+  }
 
   fecharModalCpf() {
-  this.modalCpfVisivel = false;
-}
+    this.modalCpfVisivel = false;
+  }
 }

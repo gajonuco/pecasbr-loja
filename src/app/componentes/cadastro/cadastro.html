@@ -1,0 +1,18 @@
+<div class="pagina-conta">
+  <h1>Criar conta</h1>
+  <form (ngSubmit)="cadastrar()">
+    <label>Nome <input name="nome" [(ngModel)]="nome" required></label>
+    <label>E-mail <input type="email" name="email" [(ngModel)]="email" required></label>
+    <label>Senha <input type="password" name="senha" [(ngModel)]="senha" required minlength="6"></label>
+    <label>CPF <input name="cpf" [(ngModel)]="cpf" required></label>
+    <label>Telefone <input name="telefone" [(ngModel)]="telefone" required></label>
+    <label>Data de nascimento <input type="date" name="dataNasc" [(ngModel)]="dataNasc"></label>
+    @if (erro) {
+      <p class="erro">{{ erro }}</p>
+    }
+    <button type="submit" [disabled]="carregando">
+      {{ carregando ? 'Criando...' : 'Criar conta' }}
+    </button>
+  </form>
+  <p>Já tem conta? <a routerLink="/login">Entrar</a></p>
+</div>

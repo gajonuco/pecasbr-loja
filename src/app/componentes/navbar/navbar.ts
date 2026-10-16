@@ -10,6 +10,7 @@ import { Buscacategoria } from '../buscacategoria/buscacategoria';
 import { BuscaPalavraChave } from '../busca-palavra-chave/busca-palavra-chave';
 import { BuscarProdutoByKey } from '../../services/buscar-produto-by-key';
 import { IdiomaService } from '../../services/idioma-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -43,7 +44,8 @@ export class Navbar implements OnInit {
     private router: Router,
     private busca: BuscarProdutoByKey,
     public idiomaService: IdiomaService,
-    private el: ElementRef
+    private el: ElementRef,
+    public authService: AuthService
 
   ) { this.numItens = 0; }
 

@@ -1,0 +1,190 @@
+.pagina-conta {
+  width: 100%;
+  max-width: 520px;
+  margin: 48px auto;
+  padding: 32px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.pagina-conta h1 {
+  margin: 0 0 28px;
+  text-align: center;
+  color: #1f2937;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Formulário */
+
+.pagina-conta form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 16px;
+}
+
+.pagina-conta label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Nome ocupa toda a largura */
+.pagina-conta label:first-child {
+  grid-column: 1 / -1;
+}
+
+/* Inputs */
+
+.pagina-conta input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagina-conta input:hover {
+  border-color: #9ca3af;
+}
+
+.pagina-conta input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Placeholder */
+
+.pagina-conta input::placeholder {
+  color: #9ca3af;
+}
+
+/* Estado de erro nativo */
+
+.pagina-conta input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: #dc2626;
+}
+
+/* Mensagem de erro */
+
+.pagina-conta .erro {
+  grid-column: 1 / -1;
+
+  margin: -2px 0 0;
+  padding: 10px 12px;
+
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+
+  background: #fef2f2;
+  color: #b91c1c;
+
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Botão */
+
+.pagina-conta button {
+  grid-column: 1 / -1;
+
+  width: 100%;
+  height: 46px;
+  margin-top: 2px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+.pagina-conta button:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+.pagina-conta button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.pagina-conta button:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Link para login */
+
+.pagina-conta > p:last-child {
+  margin: 24px 0 0;
+  padding-top: 20px;
+
+  border-top: 1px solid #e5e7eb;
+
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pagina-conta a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.pagina-conta a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade */
+
+@media (max-width: 600px) {
+  .pagina-conta {
+    max-width: none;
+    margin: 32px 16px;
+    padding: 24px 20px;
+  }
+
+  .pagina-conta form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pagina-conta label:first-child,
+  .pagina-conta .erro,
+  .pagina-conta button {
+    grid-column: auto;
+  }
+
+  .pagina-conta h1 {
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
+}
