@@ -19,7 +19,6 @@ import { AuthService } from '../../services/auth-service';
 import { Endereco } from '../../model/Endereco';
 import { filter, take } from 'rxjs';
 
-
 declare var bootstrap: any;
 
 @Component({

@@ -129,3 +129,10 @@
 
 </section>
 }
+@if (erro) {
+  <section class="recibo-simples">
+    <h1>Obrigada pela compra!</h1>
+    <p>Pedido nº <strong>{{ idPedido }}</strong>.</p>
+    <p>Não foi possível exibir os detalhes aqui. Se você acabou de pagar, o pagamento é confirmado automaticamente. Clientes com conta encontram os detalhes em <a href="/minha-conta">Minha conta</a>.</p>
+  </section>
+}

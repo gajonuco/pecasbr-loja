@@ -75,7 +75,8 @@
           "options": {
             "allowedHosts": [
               "all"
-            ]
+            ],
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
