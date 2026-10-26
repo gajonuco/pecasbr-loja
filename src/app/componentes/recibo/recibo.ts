@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class Recibo implements OnInit {
   public idPedido: number;
   public detalhePedido!: Pedido;
-
+  public erro = false;
   constructor(
     private route: ActivatedRoute,
     private service: PedidoService
@@ -23,15 +23,16 @@ export class Recibo implements OnInit {
   }
 
   toNumber(valor: any): number {
-  if (typeof valor === 'number') return valor;
-  // troca vírgula por ponto e converte
-  return parseFloat(String(valor).replace(',', '.'));
-}
+    if (typeof valor === 'number') return valor;
+    // troca vírgula por ponto e converte
+    return parseFloat(String(valor).replace(',', '.'));
+  }
 
   ngOnInit(): void {
     this.idPedido = this.route.snapshot.params['id'];
     this.service.recuperarPedidoPeloId(this.idPedido).subscribe({
-      next: (res: Pedido) => { this.detalhePedido = res;  console.log('Pedido recuperado:', res); }
+      next: (res: Pedido) => (this.detalhePedido = res),
+      error: () => (this.erro = true)
     });
   }
 }

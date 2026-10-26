@@ -6,6 +6,7 @@ import { Navbar }                from './componentes/navbar/navbar';
 import { Rodape }                from './componentes/rodape/rodape';
 import { TranslateModule,
          TranslateService }      from '@ngx-translate/core';
+import { AuthService } from './services/auth-service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ export class App implements OnInit {
 
   constructor(
     private renderer: Renderer2,
-    private translate: TranslateService   // ← TranslateService, não TranslateModule
+    private translate: TranslateService,
+    private authService: AuthService   // ← TranslateService, não TranslateModule
   ) {
     const idiomaSalvo = localStorage.getItem('idioma') ?? 'pt';
     this.translate.use(idiomaSalvo);
@@ -27,6 +29,8 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.renderer.listen('document', 'touchstart', () => {});
+    this.authService.inicializarSessao();
+
 
     if (this.swUpdate.isEnabled) {
       this.swUpdate.versionUpdates.pipe(
