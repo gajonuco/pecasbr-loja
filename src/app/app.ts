@@ -7,10 +7,11 @@ import { Rodape }                from './componentes/rodape/rodape';
 import { TranslateModule,
          TranslateService }      from '@ngx-translate/core';
 import { AuthService } from './services/auth-service';
+import { ChatWidget } from './componentes/chat-widget/chat-widget';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Rodape, TranslateModule],
+  imports: [RouterOutlet, Navbar, Rodape, TranslateModule, ChatWidget],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
