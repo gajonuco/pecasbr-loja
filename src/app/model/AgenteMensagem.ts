@@ -1,4 +1,5 @@
 export interface AgenteMensagemRequest{
+  sessionId: string;
   mensagem: string;
 }
 

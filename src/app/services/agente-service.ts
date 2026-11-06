@@ -11,10 +11,8 @@ export class AgenteService {
 
   constructor(private http: HttpClient){}
 
-  public enviarMensagem(mensagem: string): Observable<AgenteMensagemResponse>{
-    const request: AgenteMensagemRequest = {mensagem}
+  public enviarMensagem(sessionId: string, mensagem: string): Observable<AgenteMensagemResponse>{
+    const request: AgenteMensagemRequest = {sessionId, mensagem}
     return this.http.post<AgenteMensagemResponse>(environment.apiURL+ "/agente/mensagem", request);
   }
-
-  
 }

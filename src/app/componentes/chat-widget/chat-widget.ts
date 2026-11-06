@@ -18,6 +18,7 @@ export class ChatWidget {
   aberto = signal(false)
   carregando = signal(false)
   mensagemAtual = '';
+  private readonly sessionId = crypto.randomUUID();
   mensagens = signal<MensagemChat[]>([
     {
       autor: 'agente',
@@ -43,7 +44,7 @@ export class ChatWidget {
     this.mensagemAtual = '';
     this.carregando.set(true);
 
-    this.agenteService.enviarMensagem(texto).subscribe({
+    this.agenteService.enviarMensagem(this.sessionId, texto).subscribe({
       next: (resposta) => {
         this.mensagens.update(msgs => [...msgs, {
           autor: 'agente',
