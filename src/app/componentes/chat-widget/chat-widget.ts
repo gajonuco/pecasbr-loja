@@ -9,7 +9,7 @@ import { AcaoSugerida, ResultadoAcao } from '../../model/AgenteMensagem';
 import { PecaVariacao } from '../../model/PecaVariacao';
 import { Peca } from '../../model/Peca';
 
-interface MensagemChat{
+interface MensagemChat {
   autor: 'cliente' | 'agente'
   texto: string;
 }
@@ -37,14 +37,14 @@ export class ChatWidget {
     private pecaService: PecaService,
     private variacaoServico: PecaVariacaoServico,
     private carrinhoService: CarrinhoService
-  ) {}
+  ) { }
   public alternarAberto(): void {
     this.aberto.update(valor => !valor);
   }
 
   public enviar(): void {
     const texto = this.mensagemAtual.trim();
-    if(!texto || this.carregando()){
+    if (!texto || this.carregando()) {
       return;
     }
 
@@ -56,14 +56,16 @@ export class ChatWidget {
 
     this.agenteService.enviarMensagem(this.sessionId, texto).subscribe({
       next: (resposta) => {
-        this.mensagens.update(msgs => [...msgs, {
-          autor: 'agente',
-          texto: resposta.resposta
-        }])
-        this.carregando.set(false);
+        if (resposta.resposta?.trim()) {
+          this.mensagens.update(msgs => [...msgs, {
+            autor: 'agente',
+            texto: resposta.resposta
+          }])
+          this.carregando.set(false);
+        }
         if (resposta.acaoSugerida) {
-         this.executarAcaoSugerida(resposta.acaoSugerida);
-       }
+          this.executarAcaoSugerida(resposta.acaoSugerida);
+        }
       },
       error: (erro) => {
         const mensagemErro = erro.status === 429
@@ -74,11 +76,11 @@ export class ChatWidget {
           texto: mensagemErro
         }])
         this.carregando.set(false);
-        }
+      }
     })
   }
 
-    private executarAcaoSugerida(acao: AcaoSugerida): void {
+  private executarAcaoSugerida(acao: AcaoSugerida): void {
     if (acao.tipo !== 'ADICIONAR_CARRINHO') {
       return;
     }
@@ -106,13 +108,13 @@ export class ChatWidget {
   private finalizarAdicao(peca: Peca, acao: AcaoSugerida, variacao: PecaVariacao | undefined): void {
     this.carrinhoService.adicionarItem(peca, acao.quantidade, variacao, acao.cor, acao.tamanho);
 
-   const detalhesVariacao = [acao.cor, acao.tamanho].filter(Boolean).join(', ');
-   const detalhe = detalhesVariacao
+    const detalhesVariacao = [acao.cor, acao.tamanho].filter(Boolean).join(', ');
+    const detalhe = detalhesVariacao
       ? `${peca.nome} (${detalhesVariacao}) adicionado ao carrinho`
-     : `${peca.nome} adicionado ao carrinho`;
+      : `${peca.nome} adicionado ao carrinho`;
 
     this.enviarResultadoAcao({ tipo: 'ADICIONAR_CARRINHO', sucesso: true, detalhe });
- }
+  }
 
   private reportarFalha(acao: AcaoSugerida, motivo: string): void {
     this.enviarResultadoAcao({ tipo: acao.tipo, sucesso: false, detalhe: motivo });
@@ -122,13 +124,22 @@ export class ChatWidget {
     this.carregando.set(true);
     this.agenteService.enviarResultadoAcao(this.sessionId, resultadoAcao).subscribe({
       next: (resposta) => {
-        this.mensagens.update(msgs => [...msgs, { autor: 'agente', texto: resposta.resposta }]);
+        if (resposta.resposta?.trim()) {
+          this.mensagens.update(msgs => [
+            ...msgs,
+            {
+              autor: 'agente',
+              texto: resposta.resposta
+            }
+          ]);
+        }
+
         this.carregando.set(false);
       },
       error: () => {
         this.mensagens.update(msgs => [...msgs, { autor: 'agente', texto: 'Não consegui confirmar a operação agora.' }]);
         this.carregando.set(false);
       }
-   });
+    });
   }
 }
