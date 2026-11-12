@@ -6,7 +6,7 @@
   },
   "busca": {
     "label_secao": "Resultados",
-    "titulo": "Peças encontradas",
+    "titulo": "Peças da coleção",
     "btn_quero": "Eu quero"
   },
   "carrinho": {
@@ -27,6 +27,10 @@
   "destaques": {
     "label_colecao": "Coleção",
     "titulo": "Destaques",
+    "hero_kicker": "Moda feminina",
+    "hero_titulo": "Peças escolhidas para vestir o seu dia",
+    "hero_texto": "Caimento, cor e presença em uma vitrine fácil de percorrer. Escolha a peça, o tamanho e finalize com calma.",
+    "hero_cta": "Ver destaques",
     "btn_quero": "Eu quero",
     "nav_aria": "Navegação de produtos",
     "pagina_anterior": "Página anterior",
@@ -106,7 +110,8 @@
     "pagina_inicial": "Página inicial",
     "categorias": "Categorias",
     "carregando_categorias": "Carregando categorias…",
-    "busca_placeholder": "Procure sua peça…",
+    "busca_placeholder": "Buscar vestidos, blusas, calças…",
+    "aviso": "Moda feminina · atendimento pelo WhatsApp",
     "buscar": "Buscar",
     "carrinho": "Carrinho de compras",
     "menu": "Menu"

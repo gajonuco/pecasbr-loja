@@ -4,10 +4,10 @@
    Tokens — mesmos do destaques.component
    ───────────────────────────────────────── */
 :host {
-  --cor-terracota:       #8B5E52;
+  --cor-terracota:       #7A3E46;
   --cor-terracota-claro: #C9A99A;
-  --cor-terracota-suave: #F5EDE9;
-  --cor-terracota-hover: #7A5248;
+  --cor-terracota-suave: #F6EEEF;
+  --cor-terracota-hover: #642F38;
 
   --cor-badge-entrega-bg:     #E8F5E2;
   --cor-badge-entrega-texto:  #3B6D11;
@@ -543,15 +543,15 @@
   gap: 0.6rem;
   width: 100%;
   padding: 14px 1.5rem;
-  background: transparent;
-  border: 0.5px solid var(--cor-terracota-claro);
+  background: var(--cor-terracota);
+  border: 0.5px solid var(--cor-terracota);
   border-radius: var(--raio-botao);
   font-family: var(--fonte-corpo);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--cor-terracota);
+  color: #fff;
   cursor: pointer;
   transition: background var(--transicao), color var(--transicao), border-color var(--transicao);
 
@@ -561,8 +561,8 @@
   }
 
   &:hover:not(:disabled) {
-    background: var(--cor-terracota);
-    border-color: var(--cor-terracota);
+    background: var(--cor-terracota-hover);
+    border-color: var(--cor-terracota-hover);
     color: #fff;
     svg { transform: translateX(-2px); }
   }

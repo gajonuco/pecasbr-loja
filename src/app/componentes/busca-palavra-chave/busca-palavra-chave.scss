@@ -9,7 +9,7 @@
    Tokens — idênticos ao design system
    ───────────────────────────────────────── */
 :host {
-  --cor-terracota:       #8B5E52;
+  --cor-terracota:       #7A3E46;
   --cor-terracota-claro: #C9A99A;
   --cor-terracota-suave: #F5EDE9;
 
@@ -109,12 +109,10 @@
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 1.25rem 1rem;
 
-  @media (min-width: 480px)  { grid-template-columns: repeat(3, 1fr); }
-  @media (min-width: 768px)  { grid-template-columns: repeat(4, 1fr); }
-  @media (min-width: 1024px) { grid-template-columns: repeat(5, 1fr); }
-  @media (min-width: 1280px) { grid-template-columns: repeat(6, 1fr); }
+  @media (min-width: 768px)  { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 1100px) { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* ─────────────────────────────────────────
@@ -144,6 +142,12 @@
   background: #F7F3F1;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+}
+
+.img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .produto-img {
@@ -264,24 +268,24 @@
   margin-top: auto;
   padding: 12px 0;
   width: 100%;
-  background: transparent;
-  border: 0.5px solid var(--cor-terracota-claro);
+  background: var(--cor-terracota);
+  border: 0.5px solid var(--cor-terracota);
   border-radius: var(--raio-botao);
   font-family: var(--fonte-corpo);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--cor-terracota);
+  color: #fff;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition: background var(--transicao), color var(--transicao), border-color var(--transicao);
 
   &:hover {
-    background: var(--cor-terracota);
+    background: #642F38;
     color: #fff;
-    border-color: var(--cor-terracota);
+    border-color: #642F38;
     text-decoration: none;
   }
 

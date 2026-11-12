@@ -10,7 +10,7 @@
   height: 56px;
   border-radius: 50%;
   border: none;
-  background-color: #2c2c2c;
+  background-color: #7A3E46;
   color: #fff;
   font-size: 24px;
   cursor: pointer;
@@ -21,8 +21,8 @@
   position: absolute;
   bottom: 68px;
   right: 0;
-  width: 320px;
-  max-height: 420px;
+  width: 700px;
+  max-height: 1050px;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -33,7 +33,7 @@
 
 .chat-cabecalho {
   padding: 12px 16px;
-  background-color: #2c2c2c;
+  background-color: #7A3E46;
   color: #fff;
   font-weight: 600;
 }
@@ -51,13 +51,13 @@
   max-width: 85%;
   padding: 8px 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 21px;
   line-height: 1.4;
 }
 
 .chat-mensagem.cliente {
   align-self: flex-end;
-  background-color: #2c2c2c;
+  background-color: #7A3E46;
   color: #fff;
 }
 
@@ -84,12 +84,12 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 8px;
-  font-size: 14px;
+  font-size: 21px;
 }
 
 .chat-entrada button {
   border: none;
-  background-color: #2c2c2c;
+  background-color: #7A3E46;
   color: #fff;
   border-radius: 4px;
   padding: 8px 12px;

@@ -20,7 +20,9 @@
       <article class="card-produto">
 
         <div class="img-wrapper">
-          <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
+          <a class="img-link" [routerLink]="['/detalhe/', ITEM.id]" [attr.aria-label]="ITEM.nome">
+            <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
+          </a>
 
           <div class="badges-wrap">
             @if (ITEM.prontaEntrega === 1) {

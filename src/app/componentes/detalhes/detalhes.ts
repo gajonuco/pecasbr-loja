@@ -60,19 +60,19 @@ export class Detalhes implements OnInit {
   public recuperarPeca(id: number): void {
     this.service.getPecaPeloId(id).subscribe((peca: Peca) => {
       console.log('Peca recuperada:', peca);
-      this.pecaDetalhe           = Object.assign(new Peca(), peca);
-      this.pecaDetalhe.imagens   = peca.imagens ?? [];
-      this.pecaDetalhe.corUnica     = peca.corUnica     ?? false;
+      this.pecaDetalhe = Object.assign(new Peca(), peca);
+      this.pecaDetalhe.imagens = peca.imagens ?? [];
+      this.pecaDetalhe.corUnica = peca.corUnica ?? false;
       this.pecaDetalhe.tamanhoUnico = peca.tamanhoUnico ?? false;
-      this.imagemAtiva           = this.pecaDetalhe.imagemPrincipal;
-      this.indexAtivo            = 0;
+      this.imagemAtiva = this.pecaDetalhe.imagemPrincipal;
+      this.indexAtivo = 0;
 
       // Reseta seleção ao trocar de produto
-      this.corSelecionada        = '';
-      this.tamanhoSelecionado    = '';
-      this.variacaoSelecionada   = null;
-      this.coresDisponiveis      = [];
-      this.tamanhosDisponiveis   = [];
+      this.corSelecionada = '';
+      this.tamanhoSelecionado = '';
+      this.variacaoSelecionada = null;
+      this.coresDisponiveis = [];
+      this.tamanhosDisponiveis = [];
 
       // Carrega variações separado — mesmo padrão do editor-produto
       this.variacaoService.listar(id).subscribe({
@@ -90,14 +90,14 @@ export class Detalhes implements OnInit {
 
   private extrairCoresETamanhos(variacoes: PecaVariacao[]): void {
     const coresMap = new Map<string, string>();
-    const tamSet   = new Set<string>();
+    const tamSet = new Set<string>();
 
     variacoes.forEach(v => {
       coresMap.set(v.cor, v.hexCode ?? '#000000');
       tamSet.add(v.tamanho);
     });
 
-    this.coresDisponiveis    = Array.from(coresMap.entries()).map(([nome, hex]) => ({ nome, hex }));
+    this.coresDisponiveis = Array.from(coresMap.entries()).map(([nome, hex]) => ({ nome, hex }));
     this.tamanhosDisponiveis = Array.from(tamSet);
   }
 
@@ -128,8 +128,8 @@ export class Detalhes implements OnInit {
     if (!this.corSelecionada) return true;
     return this.pecaDetalhe.variacoes?.some(
       v => v.cor === this.corSelecionada &&
-           v.tamanho === tamanho &&
-           v.quantidadeEstoque > 0
+        v.tamanho === tamanho &&
+        v.quantidadeEstoque > 0
     ) ?? false;
   }
 
@@ -137,28 +137,28 @@ export class Detalhes implements OnInit {
 
   public selecionarImagem(img: PecaImagem, index: number): void {
     this.imagemAtiva = img.linkImagem;
-    this.indexAtivo  = index;
+    this.indexAtivo = index;
   }
 
   public imagemAnterior(): void {
     const imagens = this.pecaDetalhe.imagens;
     if (!imagens?.length) return;
-    this.indexAtivo  = (this.indexAtivo - 1 + imagens.length) % imagens.length;
+    this.indexAtivo = (this.indexAtivo - 1 + imagens.length) % imagens.length;
     this.imagemAtiva = imagens[this.indexAtivo].linkImagem;
   }
 
   public proximaImagem(): void {
     const imagens = this.pecaDetalhe.imagens;
     if (!imagens?.length) return;
-    this.indexAtivo  = (this.indexAtivo + 1) % imagens.length;
+    this.indexAtivo = (this.indexAtivo + 1) % imagens.length;
     this.imagemAtiva = imagens[this.indexAtivo].linkImagem;
   }
 
   public onMouseMove(event: MouseEvent): void {
-    const el   = event.currentTarget as HTMLElement;
+    const el = event.currentTarget as HTMLElement;
     const rect = el.getBoundingClientRect();
-    this.zoomX = ((event.clientX - rect.left) / rect.width)  * 100;
-    this.zoomY = ((event.clientY - rect.top)  / rect.height) * 100;
+    this.zoomX = ((event.clientX - rect.left) / rect.width) * 100;
+    this.zoomY = ((event.clientY - rect.top) / rect.height) * 100;
   }
 
   public get totalImagens(): number {
@@ -177,17 +177,17 @@ export class Detalhes implements OnInit {
 
     if (this.quantidade > estoqueReferencia) {
       this.quantidadeInvalida = true;
-      this.mensagemEstoque    = `Apenas ${estoqueReferencia} unidade(s) disponível(is)`;
+      this.mensagemEstoque = `Apenas ${estoqueReferencia} unidade(s) disponível(is)`;
     } else {
       this.quantidadeInvalida = false;
-      this.mensagemEstoque    = '';
+      this.mensagemEstoque = '';
     }
   }
 
   public get statusEstoque(): 'disponivel' | 'baixo' | 'esgotado' {
     const qtd = this.pecaDetalhe?.quantidadeEstoque ?? 0;
-    if (!qtd)                                                   return 'esgotado';
-    if (qtd <= (this.pecaDetalhe.estoqueCritico ?? 3))          return 'baixo';
+    if (!qtd) return 'esgotado';
+    if (qtd <= (this.pecaDetalhe.estoqueCritico ?? 3)) return 'baixo';
     return 'disponivel';
   }
 
@@ -210,29 +210,13 @@ export class Detalhes implements OnInit {
 
     if (this.quantidadeInvalida || this.quantidade < 1) return;
 
-    const carrinhoString = localStorage.getItem('AdicionarCarrinho');
-    let pedido: Pedido   = carrinhoString
-      ? JSON.parse(carrinhoString)
-      : Object.assign(new Pedido(), { itensPedido: [], valorTotal: 0 });
-
-    const item            = new ItemPedido();
-    item.qtdtItem         = this.quantidade;
-    item.precoUnitario    = this.pecaDetalhe.precoPromo > 0
-      ? this.pecaDetalhe.precoPromo
-      : this.pecaDetalhe.preco;
-    item.precoTotal       = item.precoUnitario * item.qtdtItem;
-    item.peca             = this.pecaDetalhe;
-    item.hexCodeEscolhido = this.variacaoSelecionada?.hexCode ?? '';
-
-    item.variacao         = this.variacaoSelecionada ?? undefined;
-    item.corEscolhida     = this.corSelecionada     || undefined;
-    item.tamanhoEscolhido = this.tamanhoSelecionado || undefined;
-
-    pedido.itensPedido.push(item);
-    pedido.valorTotal += item.precoTotal;
-
-    localStorage.setItem('AdicionarCarrinho', JSON.stringify(pedido));
-    this.carService.atualizarQuantidade(pedido.itensPedido.length);
+    this.carService.adicionarItem(
+      this.pecaDetalhe,
+      this.quantidade,
+      this.variacaoSelecionada ?? undefined,
+      this.corSelecionada,
+      this.tamanhoSelecionado
+    );
     this.nav.navigate(['carrinho']);
   }
 }
