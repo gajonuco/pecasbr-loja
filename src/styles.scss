@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
 
 /* Reset básico */
 *,
@@ -7,11 +7,25 @@
   box-sizing: border-box;
 }
 
+:root {
+  --cor-tinta: #1c1614;
+  --cor-papel: #f7f3ef;
+  --cor-vinho: #7a3e46;
+  --cor-vinho-hover: #642f38;
+  --cor-blush: #f6eeef;
+  --cor-ouro: #c4a46a;
+  --cor-linha: #e7ded8;
+  --fonte-display: 'Cormorant Garamond', Georgia, serif;
+  --fonte-corpo: 'Jost', sans-serif;
+  --raio: 2px;
+}
+
 /* Base da aplicação */
-body {
+html body {
   margin: 0;
-  background: #FAF7F5;
-  font-family: 'Jost', sans-serif;
+  background: var(--cor-papel);
+  color: var(--cor-tinta);
+  font-family: var(--fonte-corpo);
   -webkit-font-smoothing: antialiased;
 
   /* Remove delay de toque sem quebrar scroll */
@@ -44,4 +58,26 @@ button {
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
   user-select: none;
+}
+
+/* Bootstrap acompanha a paleta da loja, sem tema extra */
+html body .btn-primary {
+  --bs-btn-bg: var(--cor-vinho);
+  --bs-btn-border-color: var(--cor-vinho);
+  --bs-btn-hover-bg: var(--cor-vinho-hover);
+  --bs-btn-hover-border-color: var(--cor-vinho-hover);
+  --bs-btn-active-bg: var(--cor-vinho-hover);
+  --bs-btn-active-border-color: var(--cor-vinho-hover);
+  --bs-btn-color: #fff;
+  border-radius: var(--raio);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+html body .form-control:focus,
+html body .form-select:focus {
+  border-color: var(--cor-vinho);
+  box-shadow: 0 0 0 0.2rem rgba(122, 62, 70, 0.15);
 }

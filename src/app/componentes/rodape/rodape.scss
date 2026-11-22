@@ -4,7 +4,7 @@
    Tokens — idênticos ao design system
    ───────────────────────────────────────── */
 :host {
-  --cor-terracota:       #8B5E52;
+  --cor-terracota:       #7A3E46;
   --cor-terracota-claro: #C9A99A;
   --cor-terracota-suave: #F5EDE9;
 
@@ -62,12 +62,17 @@
   width: fit-content;
 }
 
+.rodape-logo-link {
+  height: 72px;
+  overflow: hidden;
+}
+
 .rodape-logo {
-  height: 140px;
+  height: 160px;
   width: auto;
-  object-fit: contain;
-  /* Clareia levemente o logo para fundo escuro */
-  filter: brightness(0) invert(1) opacity(0.85);
+  margin-top: -44px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .rodape-slogan {

@@ -4,10 +4,10 @@
    Tokens — mesmos do design system da loja
    ───────────────────────────────────────── */
 :host {
-  --cor-terracota: #8B5E52;
+  --cor-terracota: #7A3E46;
   --cor-terracota-claro: #C9A99A;
-  --cor-terracota-suave: #F5EDE9;
-  --cor-terracota-hover: #7A5248;
+  --cor-terracota-suave: #F6EEEF;
+  --cor-terracota-hover: #642F38;
 
   --fonte-display: 'Cormorant Garamond', Georgia, serif;
   --fonte-corpo: 'Jost', sans-serif;
@@ -16,7 +16,8 @@
   --raio-botao: 2px;
   --transicao: 0.2s ease;
 
-  --navbar-altura: 64px;
+  --navbar-altura: 76px;
+  --aviso-altura: 34px;
 }
 
 /* ─────────────────────────────────────────
@@ -27,8 +28,29 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #fff;
-  border-bottom: 0.5px solid #E5DDD8;
+  background: #141110;
+  border-bottom: 0.5px solid #2a2422;
+}
+
+.aviso-loja {
+  height: var(--aviso-altura);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  background: #f6f1ec;
+  color: var(--cor-terracota);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-bottom: 0.5px solid #e7ded8;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -53,10 +75,14 @@
   flex-shrink: 0;
   text-decoration: none;
 
+  height: 64px;
+  overflow: hidden;
+
   img {
-    height: 145px;
+    height: 148px;
     width: auto;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
   }
 }
 
@@ -74,11 +100,11 @@
    Link base da nav
    ───────────────────────────────────────── */
 .nav-link {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #7A6F6A;
+  color: #f6f1ec;
   background: transparent;
   border: none;
   padding: 6px 12px;
@@ -187,36 +213,54 @@
 .busca-wrapper {
   display: flex;
   align-items: center;
-  border: 0.5px solid transparent;
+  border: 0.5px solid rgba(246, 241, 236, 0.2);
   border-radius: var(--raio-botao);
+  background: rgba(246, 241, 236, 0.06);
   transition: border-color var(--transicao), background var(--transicao);
   overflow: hidden;
 
   &.busca-wrapper--ativa {
-    border-color: #E5DDD8;
-    background: #FAF7F5;
+    border-color: rgba(246, 241, 236, 0.45);
+    background: rgba(246, 241, 236, 0.08);
   }
 }
 
 .busca-input {
-  width: 0;
-  padding: 0;
+  width: 210px;
+  padding: 0 12px;
   border: none;
   background: transparent;
   font-family: var(--fonte-corpo);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 300;
-  color: #2C2520;
+  color: #f6f1ec;
   outline: none;
   transition: width 0.25s ease, padding 0.25s ease;
 
   &::placeholder {
-    color: #B0A098;
+    color: rgba(246, 241, 236, 0.55);
   }
 
   &.busca-input--visivel {
-    width: 180px;
-    padding: 0 10px;
+    width: 210px;
+    padding: 0 12px;
+  }
+}
+
+.btn-conta {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f6f1ec;
+  text-decoration: none;
+  border-radius: var(--raio-botao);
+  transition: color var(--transicao), background var(--transicao);
+
+  &:hover {
+    color: var(--cor-ouro, #c4a46a);
+    background: rgba(246, 241, 236, 0.08);
   }
 }
 
@@ -228,7 +272,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #7A6F6A;
+  color: #f6f1ec;
   cursor: pointer;
   flex-shrink: 0;
   border-radius: var(--raio-botao);
@@ -250,7 +294,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #7A6F6A;
+  color: #f6f1ec;
   text-decoration: none;
   border-radius: var(--raio-botao);
   transition: color var(--transicao), background var(--transicao);
@@ -306,7 +350,7 @@
   display: block;
   width: 100%;
   height: 1px;
-  background: #7A6F6A;
+  background: #f6f1ec;
   border-radius: 1px;
   transition: transform 0.2s ease, opacity 0.2s ease;
 
@@ -354,17 +398,17 @@
 .idioma-btn {
   font-size: 11px;
   padding: 4px 10px;
-  border: 0.5px solid #C9A99A;
+  border: 0.5px solid rgba(246, 241, 236, 0.35);
   border-radius: 2px;
   background: transparent;
   cursor: pointer;
-  color: #8B5E52;
+  color: #f6f1ec;
   transition: all .15s;
 
   &--ativo {
-    background: #8B5E52;
+    background: var(--cor-terracota);
     color: #fff;
-    border-color: #8B5E52;
+    border-color: var(--cor-terracota);
   }
 }
 
@@ -417,7 +461,8 @@
   .nav-link {
     width: 100%;
     padding: 12px 8px;
-    font-size: 10px;
+    font-size: 12px;
+    color: #1f1a18;
   }
 
   .dropdown-lista {
@@ -509,7 +554,7 @@
   .busca-mobile-overlay {
     display: block;
     position: fixed;
-    top: var(--navbar-altura);  /* empurra para baixo da navbar */
+    top: calc(var(--navbar-altura) + var(--aviso-altura));
     left: 0;
     right: 0;
     background: #fff;
@@ -554,8 +599,12 @@
     height: 32px;
   }
 
+  .navbar-logo {
+    height: 52px;
+  }
+
   .navbar-logo img {
-    height: 105px;
+    height: 120px;
   }
 
   .navbar-principal {

@@ -5,7 +5,7 @@
    Tokens de design — paleta e tipografia
    ───────────────────────────────────────── */
 :host {
-  --cor-terracota:      #8B5E52;
+  --cor-terracota:      #7A3E46;
   --cor-terracota-claro: #C9A99A;
   --cor-terracota-suave: #F5EDE9;
 
@@ -34,10 +34,48 @@
 /* ─────────────────────────────────────────
    Seção geral
    ───────────────────────────────────────── */
+.hero-editorial {
+  font-family: var(--fonte-corpo);
+  padding: 3.5rem 0 2.5rem;
+  border-bottom: 0.5px solid #E5DDD8;
+}
+
+.hero-kicker {
+  margin: 0 0 0.75rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cor-terracota);
+}
+
+.hero-titulo {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--fonte-display);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 0.95;
+  color: #1F1A18;
+}
+
+.hero-texto {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #7A6F6A;
+}
+
+.hero-cta {
+  padding: 0.85rem 1.4rem;
+}
+
 .vitrine-section {
   font-family: var(--fonte-corpo);
-  padding: 2.5rem 1rem 3rem;
-  max-width: 1400px;
+  padding: 2.5rem 1.25rem 4rem;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -74,22 +112,15 @@
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-
-  @media (min-width: 480px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  gap: 1.25rem 1rem;
 
   @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem 1.25rem;
+  }
+
+  @media (min-width: 1100px) {
     grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -103,11 +134,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color var(--transicao), transform var(--transicao);
+  transition: border-color var(--transicao), box-shadow var(--transicao), transform var(--transicao);
 
   &:hover {
-    border-color: var(--cor-terracota-claro);
-    transform: translateY(-2px);
+    border-color: transparent;
+    box-shadow: 0 18px 40px rgba(31, 26, 24, 0.08);
+    transform: translateY(-3px);
 
     .img-overlay {
       opacity: 1;
@@ -127,6 +159,12 @@
   background: #F7F3F1;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+}
+
+.img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .produto-img {
@@ -257,24 +295,24 @@
   padding-top: 12px;
   padding-bottom: 12px;
   width: 100%;
-  background: transparent;
-  border: 0.5px solid var(--cor-terracota-claro);
+  background: var(--cor-terracota);
+  border: 0.5px solid var(--cor-terracota);
   border-radius: var(--raio-botao);
   font-family: var(--fonte-corpo);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--cor-terracota);
+  color: #fff;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition: background var(--transicao), color var(--transicao), border-color var(--transicao);
 
   &:hover {
-    background: var(--cor-terracota);
+    background: #642F38;
     color: #fff;
-    border-color: var(--cor-terracota);
+    border-color: #642F38;
     text-decoration: none;
   }
 

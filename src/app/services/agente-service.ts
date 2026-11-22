@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AgenteMensagemRequest, AgenteMensagemResponse } from '../model/AgenteMensagem';
+import { AgenteMensagemRequest, AgenteMensagemResponse, ResultadoAcao } from '../model/AgenteMensagem';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,10 +11,13 @@ export class AgenteService {
 
   constructor(private http: HttpClient){}
 
-  public enviarMensagem(mensagem: string): Observable<AgenteMensagemResponse>{
-    const request: AgenteMensagemRequest = {mensagem}
-    return this.http.post<AgenteMensagemResponse>(environment.apiURL+ "/agente/mensagem", request);
+  public enviarMensagem(sessionId: string, mensagem: string): Observable<AgenteMensagemResponse>{
+    const request: AgenteMensagemRequest = { sessionId, mensagem };
+    return this.http.post<AgenteMensagemResponse>(environment.apiURL+"/agente/mensagem", request);
   }
 
-  
+  public enviarResultadoAcao(sessionId: string, resultadoAcao: ResultadoAcao): Observable<AgenteMensagemResponse>{
+    const request: AgenteMensagemRequest = { sessionId, resultadoAcao };
+    return this.http.post<AgenteMensagemResponse>(environment.apiURL+"/agente/mensagem", request);
+  }
 }

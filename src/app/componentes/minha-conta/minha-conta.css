@@ -70,7 +70,7 @@
 
 .abas-conta button.ativo {
   background: #ffffff;
-  color: #2563eb;
+  color: #7A3E46;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
@@ -133,7 +133,7 @@
 }
 
 .pagina-conta form input:focus {
-  border-color: #2563eb;
+  border-color: #7A3E46;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
@@ -171,7 +171,7 @@
   border: none;
   border-radius: 7px;
 
-  background: #2563eb;
+  background: #7A3E46;
   color: #ffffff;
 
   font-family: inherit;
@@ -186,7 +186,7 @@
 }
 
 .pagina-conta form > button:hover {
-  background: #1d4ed8;
+  background: #642F38;
   box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
 }
 
@@ -292,7 +292,7 @@
   border: none;
   border-radius: 7px;
 
-  background: #2563eb;
+  background: #7A3E46;
   color: #ffffff;
 
   font-family: inherit;
@@ -307,7 +307,7 @@
 }
 
 .lista-enderecos + button:hover {
-  background: #1d4ed8;
+  background: #642F38;
   box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
 }
 

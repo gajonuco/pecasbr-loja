@@ -1,5 +1,20 @@
 <!-- destaques.component.html -->
 
+<section class="hero-editorial">
+  <div class="container-xl">
+    <div class="row align-items-end g-4">
+      <div class="col-lg-7">
+        <p class="hero-kicker">{{ 'destaques.hero_kicker' | translate }}</p>
+        <h1 class="hero-titulo">{{ 'destaques.hero_titulo' | translate }}</h1>
+      </div>
+      <div class="col-lg-4 offset-lg-1">
+        <p class="hero-texto">{{ 'destaques.hero_texto' | translate }}</p>
+        <a class="btn btn-primary hero-cta" href="#destaques">{{ 'destaques.hero_cta' | translate }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="vitrine-section" id="destaques">
 
   <header class="vitrine-header">
@@ -14,7 +29,9 @@
 
       <!-- Imagem -->
       <div class="img-wrapper">
-        <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
+        <a class="img-link" [routerLink]="['/detalhe/', ITEM.id]" [attr.aria-label]="ITEM.nome">
+          <img [src]="ITEM.linkFoto" [alt]="ITEM.nome" class="produto-img" />
+        </a>
 
         <!-- Badges de estoque -->
         <div class="badges-wrap">
